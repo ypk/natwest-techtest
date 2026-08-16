@@ -1,15 +1,161 @@
-@import "tailwindcss";
-
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+:root {
+  --brand-purple: #5a287d;
+  --brand-purple-dark: #40135f;
+  --brand-purple-light: #f2eaf9;
+  --page-bg: #f7f5f8;
+  --text-color: #34303a;
+  --muted-text: #646068;
+  --border-color: #d9d3df;
+  --surface: #ffffff;
+  --code-bg: #1f1726;
+  --content-width: 72rem;
+  --card-shadow: 0 18px 45px rgb(64 19 95 / 12%);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  color: var(--text-color);
+  background: var(--page-bg);
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+html {
+  min-height: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+img,
+svg,
+picture,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--brand-purple);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--brand-purple-dark);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-purple);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: min(100% - 2rem, var(--content-width));
+  margin-inline: auto;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px solid var(--brand-purple);
+  border-radius: 999px;
+  padding: 0.65rem 1.35rem;
+  background: var(--brand-purple);
+  color: var(--surface);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: var(--brand-purple-dark);
+  border-color: var(--brand-purple-dark);
+  color: var(--surface);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--brand-purple);
+}
+
+.button--secondary:hover {
+  background: var(--brand-purple-light);
+  color: var(--brand-purple-dark);
+}
+
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+
+.error-page {
+  padding-block: 3rem;
+}
+
+.error-stack {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--code-bg);
+  color: var(--surface);
+  padding: 1rem;
+}
+
+@media (max-width: 47.9375rem) {
+  .container {
+    width: min(100% - 1.25rem, var(--content-width));
+  }
+
+  .button {
+    width: 100%;
   }
 }
