@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
+import { useSearchParams } from "react-router";
 
 import { getCurrentWeather } from "~/api/weatherClient";
 import type { CurrentWeather } from "./weatherTypes";
@@ -8,10 +9,48 @@ import "./WeatherSearch.css";
 type RequestStatus = "idle" | "loading" | "success" | "error";
 
 export function WeatherSearch() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<CurrentWeather | null>(null);
   const [status, setStatus] = useState<RequestStatus>("idle");
   const [error, setError] = useState<string | null>(null);
+
+  const cityFromUrl = searchParams.get("city")?.trim() ?? "";
+
+  useEffect(() => {
+    if (!cityFromUrl) {
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    setCity(cityFromUrl);
+    setStatus("loading");
+    setError(null);
+
+    getCurrentWeather(cityFromUrl, abortController.signal)
+      .then((currentWeather) => {
+        setWeather(currentWeather);
+        setStatus("success");
+      })
+      .catch((fetchError) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setStatus("error");
+        setWeather(null);
+        setError(
+          fetchError instanceof Error
+            ? fetchError.message
+            : "Unable to fetch weather. Try another city."
+        );
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [cityFromUrl]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,22 +63,7 @@ export function WeatherSearch() {
       return;
     }
 
-    setStatus("loading");
-    setError(null);
-
-    try {
-      const currentWeather = await getCurrentWeather(searchTerm);
-      setWeather(currentWeather);
-      setStatus("success");
-    } catch (fetchError) {
-      setStatus("error");
-      setWeather(null);
-      setError(
-        fetchError instanceof Error
-          ? fetchError.message
-          : "Unable to fetch weather. Try another city."
-      );
-    }
+    setSearchParams({ city: searchTerm });
   }
 
   function handleReset() {
@@ -47,6 +71,7 @@ export function WeatherSearch() {
     setWeather(null);
     setStatus("idle");
     setError(null);
+    setSearchParams({});
   }
 
   const isLoading = status === "loading";
