@@ -13,24 +13,3 @@ export type CurrentWeather = {
   windSpeed: number;
   condition: WeatherCondition;
 };
-
-export type OpenWeatherResponse = {
-  name: string;
-  sys: {
-    country: string;
-  };
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-  };
-  wind: {
-    speed: number;
-  };
-  weather: WeatherCondition[];
-};
-
-export type OpenWeatherErrorResponse = {
-  cod: string;
-  message: string;
-};
