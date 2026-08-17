@@ -1,4 +1,4 @@
-import type { CurrentWeather } from "~/features/weather/weatherTypes";
+import type { CurrentWeather } from "~/types/weather";
 
 export type WeatherProvider = {
   getCurrentWeather: (

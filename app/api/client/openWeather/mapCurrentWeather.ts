@@ -1,4 +1,4 @@
-import type { CurrentWeather } from "~/features/weather/weatherTypes";
+import type { CurrentWeather } from "~/types/weather";
 import type { OpenWeatherCurrentResponse } from "./openWeather.contracts";
 
 export function mapCurrentWeather(data: OpenWeatherCurrentResponse): CurrentWeather {
