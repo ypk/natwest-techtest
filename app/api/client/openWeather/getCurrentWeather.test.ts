@@ -16,7 +16,9 @@ describe("getCurrentWeatherFromOpenWeather", () => {
   it("throws when the API key is missing", async () => {
     await expect(
       getCurrentWeatherFromOpenWeather("London", "")
-    ).rejects.toThrow("OpenWeather API key is missing.");
+    ).rejects.toThrow(
+      "Something went wrong, please try again later.\n\nRef: ERR_CONFIG_MISSING"
+    );
   });
 
   it("fetches weather from the OpenWeather API", async () => {

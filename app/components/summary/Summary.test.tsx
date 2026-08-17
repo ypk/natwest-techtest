@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { WeatherSummary } from "./Summary";
+import { Summary } from "./Summary";
 import type { CurrentWeather } from "~/types/weather";
 
 const londonWeather: CurrentWeather = {
@@ -19,10 +19,10 @@ const londonWeather: CurrentWeather = {
   },
 };
 
-describe("WeatherSummary", () => {
+describe("Summary", () => {
   it("renders the weather location", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("London, GB")).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("WeatherSummary", () => {
 
   it("renders the weather condition description", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("light rain")).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe("WeatherSummary", () => {
 
   it("renders the current temperature", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("18°C")).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe("WeatherSummary", () => {
 
   it("renders the feels-like temperature", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("17°C")).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("WeatherSummary", () => {
 
   it("renders the wind speed", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("4.2 m/s")).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("WeatherSummary", () => {
 
   it("renders the humidity", () => {
     render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     expect(screen.getByText("63%")).toBeInTheDocument();
@@ -73,7 +73,7 @@ describe("WeatherSummary", () => {
     const handleReset = vi.fn();
 
     render(
-      <WeatherSummary weather={londonWeather} onReset={handleReset} />
+      <Summary weather={londonWeather} onReset={handleReset} />
     );
 
     await user.click(screen.getByRole("button", { name: /clear weather result/i }));
@@ -83,7 +83,7 @@ describe("WeatherSummary", () => {
 
   it("renders the correct aria-label", () => {
     const { container } = render(
-      <WeatherSummary weather={londonWeather} onReset={vi.fn()} />
+      <Summary weather={londonWeather} onReset={vi.fn()} />
     );
 
     const article = container.querySelector("article");

@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import Home, { meta } from "./home";
 
-vi.mock("~/features/weather/WeatherSearch", () => ({
-  WeatherSearch: () => <div>Weather search route content</div>,
+vi.mock("~/components/search/Search", () => ({
+  Search: () => <div>Weather search route content</div>,
 }));
 
 describe("home route", () => {

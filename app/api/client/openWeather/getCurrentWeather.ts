@@ -8,7 +8,9 @@ export async function getCurrentWeatherFromOpenWeather(
   signal?: AbortSignal
 ) {
   if (!apiKey) {
-    throw new Error("OpenWeather API key is missing.");
+    throw new Error(
+      "Something went wrong, please try again later.\nCode: ERR_CONFIG_MISSING"
+    );
   }
 
   const url = new URL(

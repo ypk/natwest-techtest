@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { WeatherSearch } from "~/features/weather/WeatherSearch";
+import { Search } from "~/components/search/Search";
 
 /**
  * returns document metadata for the index route.
@@ -15,5 +15,5 @@ export function meta({}: Route.MetaArgs) {
  * Renders the index route for the weather search component.
  */
 export default function Home() {
-  return <WeatherSearch />;
+  return <Search />;
 }

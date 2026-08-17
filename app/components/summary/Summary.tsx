@@ -5,7 +5,7 @@ type SummaryProps = {
   onReset: () => void;
 };
 
-export function WeatherSummary({ weather, onReset }: SummaryProps) {
+export function Summary({ weather, onReset }: SummaryProps) {
   const {
     city,
     country,
@@ -17,16 +17,16 @@ export function WeatherSummary({ weather, onReset }: SummaryProps) {
   } = weather;
 
   return (
-    <article className="weather-summary" aria-label={`Current weather for ${city}`}>
-      <div className="weather-summary-header">
+    <article className="summary" aria-label={`Current weather for ${city}`}>
+      <div className="summary-header">
         <div>
-          <p className="weather-location">
+          <p className="location">
             {city}, {country}
           </p>
-          <p className="weather-condition">{description}</p>
+          <p className="condition">{description}</p>
         </div>
         <button
-          className="weather-close-button"
+          className="close-button"
           type="button"
           onClick={onReset}
           aria-label="Clear weather result"
@@ -35,9 +35,9 @@ export function WeatherSummary({ weather, onReset }: SummaryProps) {
         </button>
       </div>
 
-      <p className="weather-temp">{temperature}°C</p>
+      <p className="temp">{temperature}°C</p>
 
-      <dl className="weather-stats">
+      <dl className="stats">
         <div>
           <dt>Feels like</dt>
           <dd>{feelsLike}°C</dd>

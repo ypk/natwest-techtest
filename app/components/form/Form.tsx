@@ -7,16 +7,16 @@ type FormProps = {
   onSubmit: SubmitEventHandler<HTMLFormElement>;
 };
 
-export function WeatherForm({
+export function Form({
   city,
   isLoading,
   onCityChange,
   onSubmit,
 }: FormProps) {
   return (
-    <form className="weather-form" onSubmit={onSubmit}>
+    <form className="form" onSubmit={onSubmit}>
       <label htmlFor="city">City name</label>
-      <div className="weather-form-row">
+      <div className="form-row">
         <input
           id="city"
           name="city"

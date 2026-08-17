@@ -2,12 +2,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { WeatherForm } from "./Form";
+import { Form } from "./Form";
 
-describe("WeatherForm", () => {
+describe("Form", () => {
   it("renders the provided city value", () => {
     render(
-      <WeatherForm
+      <Form
         city="London"
         isLoading={false}
         onCityChange={vi.fn()}
@@ -24,7 +24,7 @@ describe("WeatherForm", () => {
     const handleCityChange = vi.fn();
 
     render(
-      <WeatherForm
+      <Form
         city=""
         isLoading={false}
         onCityChange={handleCityChange}
@@ -44,7 +44,7 @@ describe("WeatherForm", () => {
     const handleSubmit = vi.fn((event) => event.preventDefault());
 
     render(
-      <WeatherForm
+      <Form
         city="York"
         isLoading={false}
         onCityChange={vi.fn()}
@@ -59,7 +59,7 @@ describe("WeatherForm", () => {
 
   it("disables the submit button while loading", () => {
     render(
-      <WeatherForm
+      <Form
         city="York"
         isLoading={true}
         onCityChange={vi.fn()}

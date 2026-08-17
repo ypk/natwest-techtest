@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { WeatherIntro } from "./Intro";
+import { Intro } from "./Intro";
 
-describe("WeatherIntro", () => {
-  it("renders the weather page intro content", () => {
-    render(<WeatherIntro />);
+describe("Intro", () => {
+  it("renders the page intro content", () => {
+    render(<Intro />);
 
     expect(screen.getByText("Weather application")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /natwest weather dashboard/i })).toBeInTheDocument();
