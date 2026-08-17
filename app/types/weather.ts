@@ -13,3 +13,10 @@ export type CurrentWeather = {
   windSpeed: number;
   condition: WeatherCondition;
 };
+
+export type LocationSuggestion = {
+  name: string;
+  country: string;
+  state?: string;
+  query: string;
+};

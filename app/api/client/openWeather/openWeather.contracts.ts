@@ -24,3 +24,11 @@ export type OpenWeatherErrorResponse = {
   cod: string;
   message: string;
 };
+
+export type OpenWeatherGeoItem = {
+  name: string;
+  country: string;
+  state?: string;
+  lat: number;
+  lon: number;
+};

@@ -18,6 +18,7 @@ describe("weatherSlice", () => {
     city: "",
     status: RequestStatus.IDLE,
     weather: null,
+    suggestions: null,
     error: null,
     cache: {},
   };
@@ -36,6 +37,7 @@ describe("weatherSlice", () => {
       city: "London",
       status: RequestStatus.SUCCESS,
       weather: sampleWeather,
+      suggestions: null,
       error: null,
       cache: { london: sampleWeather },
     };
@@ -44,6 +46,7 @@ describe("weatherSlice", () => {
     expect(resetState.city).toBe("");
     expect(resetState.status).toBe(RequestStatus.IDLE);
     expect(resetState.weather).toBeNull();
+    expect(resetState.suggestions).toBeNull();
     expect(resetState.cache).toEqual({ london: sampleWeather });
   });
 });

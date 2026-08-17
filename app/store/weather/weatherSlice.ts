@@ -9,6 +9,7 @@ const initialState: WeatherState = {
   city: "",
   status: RequestStatus.IDLE,
   weather: null,
+  suggestions: null,
   error: null,
   cache: loadCachedWeather(),
 };
