@@ -12,4 +12,5 @@ export interface WeatherState {
   status: RequestStatus;
   weather: CurrentWeather | null;
   error: string | null;
+  cache: Record<string, CurrentWeather>;
 }

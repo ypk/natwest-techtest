@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { loadCachedWeather, saveCachedWeather } from "~/storage";
 import { fetchWeatherThunk } from "./weatherThunks";
 import { RequestStatus } from "./weatherTypes";
 import type { WeatherState } from "./weatherTypes";
@@ -9,6 +10,7 @@ const initialState: WeatherState = {
   status: RequestStatus.IDLE,
   weather: null,
   error: null,
+  cache: loadCachedWeather(),
 };
 
 export const weatherSlice = createSlice({
@@ -39,6 +41,10 @@ export const weatherSlice = createSlice({
         state.status = RequestStatus.SUCCESS;
         state.weather = action.payload;
         state.error = null;
+
+        const normalizedKey = action.payload.city.toLowerCase().trim();
+        state.cache[normalizedKey] = action.payload;
+        saveCachedWeather(state.cache);
       })
       .addCase(fetchWeatherThunk.rejected, (state, action) => {
         if (action.meta.aborted) return;
