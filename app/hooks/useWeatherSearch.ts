@@ -1,46 +1,41 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect } from "react";
 import type { SubmitEventHandler } from "react";
 import { useSearchParams } from "react-router";
-import { fetchCurrentWeather } from "~/api/weather";
-import type { CurrentWeather } from "~/types/weather";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import {
+  RequestStatus,
+  fetchWeatherThunk,
+  resetSearch,
+  setCity as setCityAction,
+  setError as setErrorAction,
+} from "~/store/weather";
 
-export enum RequestStatus {
-  IDLE = "idle",
-  LOADING = "loading",
-  SUCCESS = "success",
-  ERROR = "error",
-}
+export { RequestStatus };
 
 export function useWeatherSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [city, setCity] = useState(searchParams.get("city") ?? "");
-  const [status, setStatus] = useState<RequestStatus>(RequestStatus.IDLE);
-  const [weather, setWeather] = useState<CurrentWeather | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const dispatch = useAppDispatch();
 
-  const fetchWeather = useCallback(async (cityName: string) => {
-    abortControllerRef.current?.abort();
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
+  const { city, status, weather, error } = useAppSelector((state) => state.weather);
 
-    setStatus(RequestStatus.LOADING);
-    setError(null);
+  const setCity = useCallback(
+    (cityName: string) => {
+      dispatch(setCityAction(cityName));
+    },
+    [dispatch]
+  );
 
-    try {
-      const result = await fetchCurrentWeather(cityName, controller.signal);
-      setWeather(result);
-      setStatus(RequestStatus.SUCCESS);
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return;
-      setError(err instanceof Error ? err.message : "Unable to fetch weather.");
-      setStatus(RequestStatus.ERROR);
-    }
-  }, []);
+  const fetchWeather = useCallback(
+    (cityName: string) => {
+      dispatch(fetchWeatherThunk(cityName));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     const initialCity = searchParams.get("city")?.trim();
     if (initialCity) {
+      setCity(initialCity);
       fetchWeather(initialCity);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,8 +46,7 @@ export function useWeatherSearch() {
     const trimmed = city.trim();
 
     if (!trimmed) {
-      setError("Please enter a city name.");
-      setStatus(RequestStatus.ERROR);
+      dispatch(setErrorAction("Please enter a city name."));
       return;
     }
 
@@ -60,14 +54,10 @@ export function useWeatherSearch() {
     fetchWeather(trimmed);
   };
 
-  function handleReset() {
-    abortControllerRef.current?.abort();
-    setCity("");
-    setWeather(null);
-    setError(null);
-    setStatus(RequestStatus.IDLE);
+  const handleReset = () => {
+    dispatch(resetSearch());
     setSearchParams({});
-  }
+  };
 
   const isLoading = status === RequestStatus.LOADING;
 

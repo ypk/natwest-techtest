@@ -18,6 +18,10 @@ export const weatherSlice = createSlice({
     setCity(state, action: PayloadAction<string>) {
       state.city = action.payload;
     },
+    setError(state, action: PayloadAction<string>) {
+      state.status = RequestStatus.ERROR;
+      state.error = action.payload;
+    },
     resetSearch(state) {
       state.city = "";
       state.status = RequestStatus.IDLE;
@@ -44,5 +48,5 @@ export const weatherSlice = createSlice({
   },
 });
 
-export const { setCity, resetSearch } = weatherSlice.actions;
+export const { setCity, setError, resetSearch } = weatherSlice.actions;
 export const weatherReducer = weatherSlice.reducer;

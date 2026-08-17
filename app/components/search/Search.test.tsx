@@ -1,9 +1,11 @@
+import { Provider } from "react-redux";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fetchCurrentWeather } from "~/api/weather";
+import { createStore } from "~/store/store";
 import { Search } from "./Search";
 import type { CurrentWeather } from "~/types/weather";
 
@@ -37,9 +39,11 @@ describe("Search", () => {
     window.history.pushState({}, "", route);
 
     return render(
-      <BrowserRouter>
-        <Search />
-      </BrowserRouter>
+      <Provider store={createStore()}>
+        <BrowserRouter>
+          <Search />
+        </BrowserRouter>
+      </Provider>
     );
   }
 
