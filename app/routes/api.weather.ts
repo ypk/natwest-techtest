@@ -1,4 +1,4 @@
-import { getCurrentWeather } from "~/api/weatherController";
+import { getCurrentWeather } from "~/api/weather";
 
 /**
  * Server-side resource route to forward requests to 

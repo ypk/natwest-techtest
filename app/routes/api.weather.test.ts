@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { getCurrentWeather } from "~/api/weatherController";
+import { getCurrentWeather } from "~/api/weather";
 import { loader } from "./api.weather";
 
-vi.mock("~/api/weatherController", () => ({
+vi.mock("~/api/weather", () => ({
   getCurrentWeather: vi.fn(),
 }));
 
