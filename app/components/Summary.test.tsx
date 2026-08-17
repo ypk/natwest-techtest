@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { WeatherSummary } from "./WeatherSummary";
-import type { CurrentWeather } from "./weatherTypes";
+import { WeatherSummary } from "./Summary";
+import type { CurrentWeather } from "~/types/weather";
 
 const londonWeather: CurrentWeather = {
   city: "London",

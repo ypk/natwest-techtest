@@ -1,17 +1,19 @@
-type WeatherStatusMessageProps = {
+import { RequestStatus } from "~/hooks/useWeatherSearch";
+
+type StatusMessageProps = {
   error: string | null;
-  status: "idle" | "loading" | "success" | "error";
+  status: RequestStatus;
 };
 
 export function WeatherStatusMessage({
   error,
   status,
-}: WeatherStatusMessageProps) {
-  if (status === "idle") {
+}: StatusMessageProps) {
+  if (status === RequestStatus.IDLE) {
     return <p className="weather-message">Enter a city to get started.</p>;
   }
 
-  if (status === "error" && error) {
+  if (status === RequestStatus.ERROR && error) {
     return (
       <p className="weather-message weather-message--error" role="alert">
         {error}

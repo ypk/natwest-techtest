@@ -1,6 +1,6 @@
 import type { SubmitEventHandler } from "react";
 
-type WeatherFormProps = {
+type FormProps = {
   city: string;
   isLoading: boolean;
   onCityChange: (city: string) => void;
@@ -12,7 +12,7 @@ export function WeatherForm({
   isLoading,
   onCityChange,
   onSubmit,
-}: WeatherFormProps) {
+}: FormProps) {
   return (
     <form className="weather-form" onSubmit={onSubmit}>
       <label htmlFor="city">City name</label>

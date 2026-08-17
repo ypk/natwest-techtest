@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { WeatherForm } from "./WeatherForm";
+import { WeatherForm } from "./Form";
 
 describe("WeatherForm", () => {
   it("renders the provided city value", () => {

@@ -1,11 +1,11 @@
-import type { CurrentWeather } from "./weatherTypes";
+import type { CurrentWeather } from "~/types/weather";
 
-type WeatherSummaryProps = {
+type SummaryProps = {
   weather: CurrentWeather;
   onReset: () => void;
 };
 
-export function WeatherSummary({ weather, onReset }: WeatherSummaryProps) {
+export function WeatherSummary({ weather, onReset }: SummaryProps) {
   const {
     city,
     country,
