@@ -8,6 +8,7 @@ This application lets users search for current weather conditions by city name o
 
 Key highlights:
 - **Search and URL sync**: Search terms sync directly to the URL (`?city=London`), allowing shareable links and browser history navigation.
+- **Location Disambiguation**: Broad city searches (e.g. `York` or `Paris`) detect multiple matching cities (e.g. `York, GB` vs `York, US`) and present interactive suggestion links to load the exact location.
 - **Two-level response caching**: Repeating city searches return instant results (0ms latency) via in-memory Redux state and browser `sessionStorage` persistence.
 - **Request cancellation**: In-flight requests automatically abort via `AbortController` when a user types a new search or resets the form.
 - **Error handling**: Gracefully handles missing cities, network issues, and missing API keys with helpful error codes (`ERR_CONFIG_MISSING`).
@@ -17,15 +18,15 @@ Key highlights:
 
 The project is structured to keep UI logic separate from data fetching and state management:
 
-- **UI Components** (`app/components/`): Presentational components co-located with their unit tests in dedicated subfolders (`form/`, `intro/`, `message/`, `search/`, `summary/`).
+- **UI Components** (`app/components/`): Presentational components co-located with their unit tests in dedicated subfolders (`disambiguation/`, `form/`, `intro/`, `message/`, `search/`, `summary/`).
 - **Redux Store** (`app/store/`): Global application state managed by Redux Toolkit (`@reduxjs/toolkit` and `react-redux`).
   - `store.ts`: Store configuration (`configureStore`).
   - `hooks.ts`: Typed Redux hooks (`useAppDispatch`, `useAppSelector`).
   - `weather/`: Modular weather store module with `weatherSlice`, `weatherThunks` (`fetchWeatherThunk`), `weatherTypes`, and unit tests.
-- **Cache and Storage Utilities** (`app/utils/weatherStorage.ts`): Browser `sessionStorage` helpers for caching search results across page reloads.
+- **Storage Layer** (`app/storage/`): Facade and Provider pattern supporting pluggable browser storage engines (`sessionStorage`, `localStorage`, `cookieStorage`).
 - **State Hook** (`app/hooks/useWeatherSearch.ts`): Custom React hook connecting components to the Redux store while managing URL query parameter synchronization.
-- **API Layer** (`app/api/`): Built using a Facade/Provider pattern. Components and routes only talk to `app/api/weather`. The facade delegates to `weatherProvider`, which calls the OpenWeather client. This makes it straightforward to swap out OpenWeather for WeatherAPI or a mock data source without touching UI code.
-- **Types** (`app/types/`): Shared TypeScript domain interfaces (`CurrentWeather`, `WeatherCondition`).
+- **API Layer** (`app/api/`): Built using a Facade/Provider pattern with OpenWeather Geocoding API (`/geo/1.0/direct`) for location disambiguation. Components and routes only talk to `app/api/weather`. The facade delegates to `weatherProvider`, which calls the OpenWeather client.
+- **Types** (`app/types/`): Shared TypeScript domain interfaces (`CurrentWeather`, `WeatherCondition`, `LocationSuggestion`).
 
 ## Getting Started
 
@@ -36,7 +37,7 @@ The project is structured to keep UI logic separate from data fetching and state
 
 ### Environment Setup
 
-The application uses the OpenWeather API (`/data/2.5/weather`). You need an API key to fetch live weather data.
+The application uses the OpenWeather API (`/data/2.5/weather` and `/geo/1.0/direct`). You need an API key to fetch live weather data.
 
 1. Get a free API key from [OpenWeather](https://openweathermap.org/api).
 2. Create a `.env.local` file in the root directory:
@@ -90,8 +91,9 @@ docker run -p 3000:3000 -e OPENWEATHER_API_KEY=your_api_key weather-app
 
 ## Testing
 
-The codebase includes 49 unit and integration tests written with Vitest and React Testing Library across 14 test files:
-- **Redux Store and Caching**: Reducers, thunks, in-memory cache, and `sessionStorage` helpers.
+The codebase includes 61 unit and integration tests written with Vitest and React Testing Library across 17 test files:
+- **Location Disambiguation**: OpenWeather geocoding client, thunks, `<Disambiguation />` component, and interactive suggestion links.
+- **Redux Store and Caching**: Reducers, thunks, in-memory cache, and `sessionStorage` facade helpers.
 - **Components**: Form inputs, user events, loading/error states, and display logic.
 - **API and Mappers**: Metric rounding, data mapping, missing key behavior, and error code outputs.
 - **Routes and Handlers**: Document metadata, API resource endpoints, and 404 wildcard fallback routing.

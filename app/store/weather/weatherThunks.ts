@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchCurrentWeather } from "~/api/weather";
+import type { FetchWeatherResult } from "~/api/weather/fetchCurrentWeather";
 import type { RootState } from "~/store/store";
-import type { CurrentWeather } from "~/types/weather";
 
 export const fetchWeatherThunk = createAsyncThunk<
-  CurrentWeather,
+  FetchWeatherResult,
   string,
   { state: RootState; rejectValue: string }
 >("weather/fetchCurrentWeather", async (cityName, { getState, rejectWithValue, signal }) => {
@@ -12,7 +12,7 @@ export const fetchWeatherThunk = createAsyncThunk<
   const cachedWeather = getState().weather?.cache?.[normalizedKey];
 
   if (cachedWeather) {
-    return cachedWeather;
+    return { weather: cachedWeather };
   }
 
   try {

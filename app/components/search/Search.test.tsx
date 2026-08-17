@@ -67,7 +67,7 @@ describe("Search", () => {
 
   it("renders weather returned from the client", async () => {
     const user = userEvent.setup();
-    mockedFetchCurrentWeather.mockResolvedValue(londonWeather);
+    mockedFetchCurrentWeather.mockResolvedValue({ weather: londonWeather });
 
     renderSearch();
 
@@ -96,7 +96,7 @@ describe("Search", () => {
 
   it("clears the result when the reset button is clicked", async () => {
     const user = userEvent.setup();
-    mockedFetchCurrentWeather.mockResolvedValue(londonWeather);
+    mockedFetchCurrentWeather.mockResolvedValue({ weather: londonWeather });
 
     renderSearch();
 
@@ -113,12 +113,31 @@ describe("Search", () => {
   });
 
   it("loads weather from the city query parameter", async () => {
-    mockedFetchCurrentWeather.mockResolvedValue(londonWeather);
+    mockedFetchCurrentWeather.mockResolvedValue({ weather: londonWeather });
 
     renderSearch("/?city=London");
 
     expect(screen.getByLabelText(/city name/i)).toHaveValue("London");
     expect(mockedFetchCurrentWeather).toHaveBeenCalledWith("London", expect.any(AbortSignal));
     expect(await screen.findByText("London, GB")).toBeInTheDocument();
+  });
+
+  it("renders location suggestions when search returns multiple cities", async () => {
+    const user = userEvent.setup();
+    mockedFetchCurrentWeather.mockResolvedValue({
+      suggestions: [
+        { name: "York", country: "GB", state: "England", query: "York, GB" },
+        { name: "York", country: "US", state: "Pennsylvania", query: "York, US" },
+      ],
+      city: "York",
+    });
+
+    renderSearch();
+
+    await user.type(screen.getByLabelText(/city name/i), "York");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(await screen.findByText(/multiple locations found for "york"/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /york, england, gb/i })).toBeInTheDocument();
   });
 });

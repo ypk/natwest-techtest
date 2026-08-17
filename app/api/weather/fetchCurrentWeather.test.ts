@@ -22,11 +22,32 @@ describe("fetchCurrentWeather", () => {
 
     const result = await fetchCurrentWeather("London");
 
-    expect(result).toEqual(weather);
+    expect(result).toEqual({ weather });
     expect(mockFetch).toHaveBeenCalledWith(
       "/api/weather?city=London",
       { signal: undefined }
     );
+  });
+
+  it("returns location suggestions when multiple matching cities are returned", async () => {
+    const suggestionsResponse = {
+      suggestions: [
+        { name: "York", country: "GB", state: "England", query: "York, GB" },
+        { name: "York", country: "US", state: "Pennsylvania", query: "York, US" },
+      ],
+      city: "York",
+    };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(suggestionsResponse),
+    });
+
+    const result = await fetchCurrentWeather("York");
+
+    expect(result).toEqual({
+      suggestions: suggestionsResponse.suggestions,
+      city: "York",
+    });
   });
 
   it("throws with the server error message on a failed response", async () => {

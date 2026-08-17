@@ -16,7 +16,7 @@ export function useWeatherSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const { city, status, weather, error } = useAppSelector((state) => state.weather);
+  const { city, status, weather, suggestions, error } = useAppSelector((state) => state.weather);
 
   const setCity = useCallback(
     (cityName: string) => {
@@ -25,21 +25,14 @@ export function useWeatherSearch() {
     [dispatch]
   );
 
-  const fetchWeather = useCallback(
-    (cityName: string) => {
-      dispatch(fetchWeatherThunk(cityName));
-    },
-    [dispatch]
-  );
+  const urlCity = searchParams.get("city")?.trim() || "";
 
   useEffect(() => {
-    const initialCity = searchParams.get("city")?.trim();
-    if (initialCity) {
-      setCity(initialCity);
-      fetchWeather(initialCity);
+    if (urlCity) {
+      dispatch(setCityAction(urlCity));
+      dispatch(fetchWeatherThunk(urlCity));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [urlCity, dispatch]);
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -51,7 +44,6 @@ export function useWeatherSearch() {
     }
 
     setSearchParams({ city: trimmed });
-    fetchWeather(trimmed);
   };
 
   const handleReset = () => {
@@ -66,6 +58,7 @@ export function useWeatherSearch() {
     setCity,
     status,
     weather,
+    suggestions,
     error,
     isLoading,
     handleSubmit,

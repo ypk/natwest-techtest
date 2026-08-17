@@ -29,6 +29,7 @@ export const weatherSlice = createSlice({
       state.city = "";
       state.status = RequestStatus.IDLE;
       state.weather = null;
+      state.suggestions = null;
       state.error = null;
     },
   },
@@ -39,13 +40,21 @@ export const weatherSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchWeatherThunk.fulfilled, (state, action) => {
-        state.status = RequestStatus.SUCCESS;
-        state.weather = action.payload;
-        state.error = null;
+        if (action.payload.suggestions) {
+          state.status = RequestStatus.DISAMBIGUATION;
+          state.suggestions = action.payload.suggestions;
+          state.weather = null;
+          state.error = null;
+        } else if (action.payload.weather) {
+          state.status = RequestStatus.SUCCESS;
+          state.weather = action.payload.weather;
+          state.suggestions = null;
+          state.error = null;
 
-        const normalizedKey = action.payload.city.toLowerCase().trim();
-        state.cache[normalizedKey] = action.payload;
-        saveCachedWeather(state.cache);
+          const normalizedKey = action.payload.weather.city.toLowerCase().trim();
+          state.cache[normalizedKey] = action.payload.weather;
+          saveCachedWeather(state.cache);
+        }
       })
       .addCase(fetchWeatherThunk.rejected, (state, action) => {
         if (action.meta.aborted) return;

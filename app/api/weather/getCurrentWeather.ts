@@ -12,6 +12,16 @@ export async function getCurrentWeather(request: Request) {
   }
 
   try {
+    if (!city.includes(",") && weatherProvider.getGeoLocations) {
+      const suggestions = await weatherProvider.getGeoLocations(
+        city,
+        request.signal
+      );
+      if (suggestions.length > 1) {
+        return Response.json({ suggestions, city });
+      }
+    }
+
     const weather = await weatherProvider.getCurrentWeather(
       city,
       request.signal
