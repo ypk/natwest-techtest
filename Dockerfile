@@ -18,5 +18,6 @@ FROM node:24-alpine
 COPY ./package.json package-lock.json /app/
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 WORKDIR /app
 CMD ["npm", "run", "start"]

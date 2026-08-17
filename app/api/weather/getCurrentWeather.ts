@@ -19,6 +19,14 @@ export async function getCurrentWeather(request: Request) {
 
     return Response.json(weather);
   } catch (error) {
+    const cause = error instanceof Error ? (error as unknown as Record<string, unknown>).cause : undefined;
+    console.error("[API WEATHER ERROR]", {
+      city,
+      error: error instanceof Error ? error.message : error,
+      cause: cause instanceof Error ? cause.message : cause,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return Response.json(
       {
         message:

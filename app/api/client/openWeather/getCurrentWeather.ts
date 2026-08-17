@@ -8,6 +8,9 @@ export async function getCurrentWeatherFromOpenWeather(
   signal?: AbortSignal
 ) {
   if (!apiKey) {
+    console.error(
+      "[OPENWEATHER CLIENT ERROR] OpenWeather API key is empty or undefined."
+    );
     throw new Error(
       "Something went wrong, please try again later.\nCode: ERR_CONFIG_MISSING"
     );
@@ -24,11 +27,37 @@ export async function getCurrentWeatherFromOpenWeather(
     units: "metric",
   }).toString();
 
-  const response = await fetch(url, { signal });
+  let response: Response;
+  try {
+    response = await fetch(url, { signal });
+  } catch (fetchErr) {
+    const cause = fetchErr instanceof Error ? (fetchErr as unknown as Record<string, unknown>).cause : undefined;
+    console.error("[OPENWEATHER FETCH FAILED]", {
+      url: url.toString().replace(apiKey, "[REDACTED]"),
+      error: fetchErr instanceof Error ? fetchErr.message : fetchErr,
+      cause: cause instanceof Error ? cause.message : cause,
+    });
+    throw fetchErr;
+  }
 
   if (!response.ok) {
-    const error = (await response.json()) as OpenWeatherErrorResponse;
-    throw new Error(error.message || "Unable to fetch weather.");
+    const errorText = await response.text();
+    console.error(`[OPENWEATHER HTTP ${response.status}]`, {
+      url: url.toString().replace(apiKey, "[REDACTED]"),
+      status: response.status,
+      statusText: response.statusText,
+      body: errorText,
+    });
+
+    let errorMessage = "Unable to fetch weather.";
+    try {
+      const errorJson = JSON.parse(errorText) as OpenWeatherErrorResponse;
+      errorMessage = errorJson.message || errorMessage;
+    } catch {
+      // Keep default error message if JSON parsing fails
+    }
+
+    throw new Error(errorMessage);
   }
 
   const data = await response.json();

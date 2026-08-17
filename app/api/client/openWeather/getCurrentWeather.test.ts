@@ -17,7 +17,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
     await expect(
       getCurrentWeatherFromOpenWeather("London", "")
     ).rejects.toThrow(
-      "Something went wrong, please try again later.\n\nRef: ERR_CONFIG_MISSING"
+      "Something went wrong, please try again later.\nCode: ERR_CONFIG_MISSING"
     );
   });
 
@@ -49,7 +49,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
   it("throws with the API error message on a failed response", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
-      json: () => Promise.resolve({ cod: "404", message: "city not found" }),
+      text: () => Promise.resolve(JSON.stringify({ cod: "404", message: "city not found" })),
     });
 
     await expect(

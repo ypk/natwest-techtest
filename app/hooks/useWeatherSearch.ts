@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { SubmitEventHandler } from "react";
 import { useSearchParams } from "react-router";
 import { fetchCurrentWeather } from "~/api/weather";
-import type { CurrentWeather } from "~/features/weather/weatherTypes";
+import type { CurrentWeather } from "~/types/weather";
 
 export enum RequestStatus {
   IDLE = "idle",
