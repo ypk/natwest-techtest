@@ -15,7 +15,7 @@ export function Search() {
       <section className="container layout" aria-labelledby="weather-title">
         <Intro />
 
-        <section className="card panel stack" aria-label="Weather search">
+        <section className="card search-panel stack" aria-label="Weather search">
           <Form
             city={city}
             isLoading={isLoading}

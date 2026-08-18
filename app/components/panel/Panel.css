@@ -1,0 +1,56 @@
+.panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.panel .timestamp {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  width: 6.5rem;
+  text-align: left;
+}
+
+.panel .icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.panel .temp {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  width: 3rem;
+  text-align: right;
+}
+
+.panel .condition {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  width: 5rem;
+  text-align: left;
+}
+
+.panel .details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

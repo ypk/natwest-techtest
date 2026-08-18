@@ -1,4 +1,4 @@
-.panel {
+.search-panel {
   padding: 1.5rem;
 }
 
@@ -168,7 +168,7 @@
 }
 
 @media (min-width: 48rem) {
-  .panel {
+  .search-panel {
     padding: 2rem;
   }
 

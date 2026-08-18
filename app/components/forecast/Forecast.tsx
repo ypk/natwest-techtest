@@ -1,4 +1,4 @@
-import { Card } from "~/components/card/Card";
+import { Panel } from "~/components/panel/Panel";
 import type { DailyForecastGroup } from "~/utils/date";
 import "./Forecast.css";
 
@@ -20,7 +20,7 @@ export function Forecast({ forecast }: ForecastProps) {
             <h4 className="day-title">{group.dayLabel}</h4>
             <div className="track" role="region" aria-label={`Forecast for ${group.dayLabel}`}>
               {group.items.map((item) => (
-                <Card key={item.dt} item={item} />
+                <Panel key={item.dt} item={item} />
               ))}
             </div>
           </div>

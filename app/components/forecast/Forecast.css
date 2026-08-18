@@ -37,79 +37,8 @@
 
 .forecast .track {
   display: flex;
-  gap: 0.875rem;
-  overflow-x: auto;
-  padding-bottom: 0.75rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-
-.forecast .track::-webkit-scrollbar {
-  height: 6px;
-}
-
-.forecast .track::-webkit-scrollbar-track {
-  background: var(--surface-muted, #f1f5f9);
-  border-radius: 999px;
-}
-
-.forecast .track::-webkit-scrollbar-thumb {
-  background: var(--brand-purple, #6366f1);
-  border-radius: 999px;
-}
-
-.forecast .card {
-  flex: 0 0 auto;
-  width: 8.5rem;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 1rem 0.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  scroll-snap-align: start;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 
-.forecast .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.forecast .timestamp {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-align: center;
-}
-
-.forecast .icon {
-  width: 3.125rem;
-  height: 3.125rem;
-  object-fit: contain;
-}
-
-.forecast .temp {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.forecast .condition {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.forecast .details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.125rem;
-  margin-top: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
