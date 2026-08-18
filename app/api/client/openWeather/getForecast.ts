@@ -1,33 +1,37 @@
-import type { LocationSuggestion } from "~/types/weather";
-import type { OpenWeatherGeoItem } from "./openWeather.contracts";
+import type { ForecastItem } from "~/types/weather";
+import { mapForecastFromOpenWeather } from "./mapForecast";
+import type { OpenWeatherForecastResponse } from "./openWeather.contracts";
 import { openWeatherSettings } from "./openWeather.settings";
 
-export async function getGeoLocationsFromOpenWeather(
+export async function getForecastFromOpenWeather(
   city: string,
   apiKey: string,
   signal?: AbortSignal
-): Promise<LocationSuggestion[]> {
-  if (!apiKey || !city.trim()) {
+): Promise<ForecastItem[]> {
+  if (!apiKey || !apiKey.trim()) {
     return [];
   }
 
   const url = new URL(
-    openWeatherSettings.geoPath,
+    openWeatherSettings.forecastPath,
     openWeatherSettings.baseUrl
   );
 
   url.search = new URLSearchParams({
     appid: apiKey,
     q: city.trim(),
-    limit: "5",
+    units: "metric",
   }).toString();
 
   let response: Response;
   try {
     response = await fetch(url, { signal });
   } catch (fetchErr) {
+    if (fetchErr instanceof DOMException && fetchErr.name === "AbortError") {
+      throw fetchErr;
+    }
     const cause = fetchErr instanceof Error ? (fetchErr as unknown as Record<string, unknown>).cause : undefined;
-    console.error("[OPENWEATHER GEO FETCH FAILED]", {
+    console.error("[OPENWEATHER FORECAST FETCH FAILED]", {
       url: url.toString().replace(apiKey, "[REDACTED]"),
       error: fetchErr instanceof Error ? fetchErr.message : fetchErr,
       cause: cause instanceof Error ? cause.message : cause,
@@ -37,7 +41,7 @@ export async function getGeoLocationsFromOpenWeather(
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error(`[OPENWEATHER GEO HTTP ${response.status}]`, {
+    console.error(`[OPENWEATHER FORECAST HTTP ${response.status}]`, {
       url: url.toString().replace(apiKey, "[REDACTED]"),
       status: response.status,
       statusText: response.statusText,
@@ -47,28 +51,10 @@ export async function getGeoLocationsFromOpenWeather(
   }
 
   try {
-    const items = (await response.json()) as OpenWeatherGeoItem[];
-    if (!Array.isArray(items)) return [];
-
-    const seen = new Set<string>();
-    const suggestions: LocationSuggestion[] = [];
-
-    for (const item of items) {
-      const key = `${item.name.toLowerCase()}-${item.country.toLowerCase()}-${(item.state || "").toLowerCase()}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        suggestions.push({
-          name: item.name,
-          country: item.country,
-          state: item.state,
-          query: `${item.name}, ${item.country}`,
-        });
-      }
-    }
-
-    return suggestions;
+    const data = (await response.json()) as OpenWeatherForecastResponse;
+    return mapForecastFromOpenWeather(data);
   } catch (parseErr) {
-    console.error("[OPENWEATHER GEO PARSE ERROR]", {
+    console.error("[OPENWEATHER FORECAST PARSE ERROR]", {
       url: url.toString().replace(apiKey, "[REDACTED]"),
       error: parseErr instanceof Error ? parseErr.message : parseErr,
     });

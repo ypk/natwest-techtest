@@ -1,4 +1,8 @@
-import type { CurrentWeather, LocationSuggestion } from "~/types/weather";
+import type {
+  CurrentWeather,
+  ForecastItem,
+  LocationSuggestion,
+} from "~/types/weather";
 
 export interface WeatherProvider {
   getCurrentWeather(
@@ -9,4 +13,8 @@ export interface WeatherProvider {
     city: string,
     signal?: AbortSignal
   ): Promise<LocationSuggestion[]>;
+  getForecast?(
+    city: string,
+    signal?: AbortSignal
+  ): Promise<ForecastItem[]>;
 }

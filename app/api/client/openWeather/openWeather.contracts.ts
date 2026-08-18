@@ -32,3 +32,30 @@ export type OpenWeatherGeoItem = {
   lat: number;
   lon: number;
 };
+
+export type OpenWeatherForecastItem = {
+  dt: number;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    humidity: number;
+  };
+  weather: OpenWeatherCondition[];
+  wind: {
+    speed: number;
+  };
+  dt_txt: string;
+};
+
+export type OpenWeatherForecastResponse = {
+  cod: string;
+  message: number | string;
+  cnt: number;
+  list: OpenWeatherForecastItem[];
+  city: {
+    name: string;
+    country: string;
+  };
+};

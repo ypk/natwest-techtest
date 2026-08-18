@@ -4,6 +4,17 @@ export type WeatherCondition = {
   main: string;
 };
 
+export type ForecastItem = {
+  dt: number;
+  dateTimeText: string;
+  temperature: number;
+  tempMin: number;
+  tempMax: number;
+  humidity: number;
+  windSpeed: number;
+  condition: WeatherCondition;
+};
+
 export type CurrentWeather = {
   city: string;
   country: string;
@@ -12,6 +23,7 @@ export type CurrentWeather = {
   humidity: number;
   windSpeed: number;
   condition: WeatherCondition;
+  forecast?: ForecastItem[];
 };
 
 export type LocationSuggestion = {
