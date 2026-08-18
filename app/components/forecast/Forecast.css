@@ -5,14 +5,48 @@
   margin-top: 1.5rem;
   border-top: 1px solid var(--border-color);
   padding-top: 1.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.forecast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .forecast .title {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--text-heading);
+  color: var(--brand-purple-dark, #40135f);
 }
+
+.forecast .layout-toggle {
+  display: inline-flex;
+  background: var(--brand-purple-light, #f2eaf9);
+  padding: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+}
+
+.forecast .toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-text, #646068);
+  border-radius: 999px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.forecast .toggle-btn.active {
+  background: var(--brand-purple, #5a287d);
+  color: var(--surface, #ffffff);
+}
+
 
 .forecast .day-groups {
   display: flex;

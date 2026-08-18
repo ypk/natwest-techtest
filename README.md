@@ -8,24 +8,27 @@ This application lets users search for current weather conditions by city name o
 
 Key features:
 - **Search and URL sync**: Search terms sync to the URL (`?city=London`) for shareable links and browser history navigation.
-- **Extended 5-Day Forecast**: A scrollable horizontal carousel that shows 3-hour interval weather forecasts.
+- **Extended 5-Day Forecast Layouts**: Users can switch between a flat vertically stacked daily panel list and an interactive tabbed layout that maps weekdays, dates, and min/max temperatures.
 - **Location Disambiguation**: Broad city searches (like `York` or `Paris`) detect multiple matching cities (such as `York, GB` and `York, US`) and present suggestion links to load the exact location.
-- **Two-level response caching**: Repeating city searches return instant results using in-memory Redux state and browser `sessionStorage` with a 10-minute expiration.
-- **Request cancellation**: Active requests abort using `AbortController` when a user types a new search or resets the form.
+- **Accessible Detail Panels**: Restructured details panels with customized SVGs, screen-reader `aria-label` tags, and hover tooltips (`title`) across all forecast details.
+- **Two-level response caching**: Repeated city searches return instant results using in-memory Redux state and browser `sessionStorage` with a 10-minute expiration.
+- **Request cancellation**: Active requests abort via `AbortController` when a user types a new search or resets the form.
 - **Error handling**: Displays helpful messages for missing cities, network issues, and missing API keys (`ERR_CONFIG_MISSING`).
-- **Responsive layout**: Mobile-first design that works across different screen sizes.
+- **Responsive layout**: Mobile-first design that works across different screen sizes, with grid column safety overrides on tablets and desktops.
 
 ## Architecture
 
 The project separates UI logic, data fetching, and state management:
 
-- **UI Components** (`app/components/`): Presentational components located with their unit tests in dedicated subfolders (`disambiguation/`, `forecast/`, `form/`, `intro/`, `message/`, `search/`, `summary/`).
-- **Redux Store** (`app/store/`): Global application state managed by Redux Toolkit.
+- **UI Components** (`app/components/`): Presentational components located with their unit tests in dedicated subfolders (`disambiguation/`, `forecast/`, `form/`, `intro/`, `message/`, `panel/`, `search/`, `summary/`, `tabs/`).
+- **Redux Store** (`app/store/`): Global state managed by Redux Toolkit.
   - `store.ts`: Store configuration.
   - `hooks.ts`: Typed Redux hooks (`useAppDispatch`, `useAppSelector`).
   - `weather/`: Weather store slice, thunks, types, and unit tests.
-- **Storage Layer** (`app/storage/`): Provider pattern that supports different browser storage engines (like `sessionStorage`, `localStorage`, or `cookieStorage`).
-- **State Hook** (`app/hooks/useWeatherSearch.ts`): Custom React hook that connects components to the Redux store and manages URL query parameter synchronization.
+- **Storage Layer** (`app/storage/`): Provider pattern that supports browser storage engines (like `sessionStorage`, `localStorage`, or `cookieStorage`).
+- **State Hooks** (`app/hooks/`):
+  - `useWeatherSearch.ts`: Custom React hook that connects components to the Redux store and manages URL query parameter synchronization.
+  - `useTabs.ts`: Custom React hook that groups forecasts, selects active tabs, and calculates daily min/max temperatures.
 - **API Layer** (`app/api/`): Client mappers and services that fetch current weather, forecast, and geocoding data from OpenWeather. Components and routes only talk to `app/api/weather`.
 - **Types** (`app/types/`): Shared TypeScript domain interfaces.
 
@@ -94,3 +97,23 @@ The codebase includes unit and integration tests written with Vitest and React T
 - **Components**: Test coverage for form inputs, user interaction, display states, and error layouts.
 - **API and Mappers**: Test coverage for data conversion, rounding, and error reporting.
 - **Routes and Handlers**: Test coverage for resource endpoints, metadata, and 404 routing.
+
+## Key Decisions & Trade-offs
+
+### 1. State Management: Redux Toolkit (RTK)
+- **Decision**: Used Redux Toolkit to manage global search states, cached weather thunks, and geocoding suggestions.
+- **Trade-off**: While React Query works well for server query cache state, RTK provides central client control over cache states, thunk status updates, and custom abort dispatches (`AbortController`). This keeps the presentation code separate from database and API logic.
+
+### 2. Multi-Layer Caching (Redux + sessionStorage)
+- **Decision**: Implemented client-side memory cache in the RTK store, backed by browser `sessionStorage` cache with a 10-minute expiration timestamp.
+- **Trade-off**: This increases caching efficiency and reduces API requests. `sessionStorage` is preferred over `localStorage` because it automatically clears when the browser session ends.
+
+### 3. Responsive Dual Layout
+- **Decision**: Preserved the original flat day lists and added a tabbed layout, allowing users to switch dynamically.
+- **Trade-off**: This increases CSS complexity, but it delivers a better user experience than a single static layout.
+
+### Future Improvements
+- **End-to-End Tests**: Set up integration tests with Playwright or Cypress for search scenarios.
+- **Visual Regression Checks**: Integrate screenshot comparisons to verify UI stability across layout modes.
+- **Accessibility Audits**: Run automated accessibility checks with axe-core to confirm contrast and screen-reader compliance.
+

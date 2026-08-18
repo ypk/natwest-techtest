@@ -42,6 +42,8 @@ describe("Panel component", () => {
     expect(weatherIcon).toHaveAttribute("src", "https://openweathermap.org/img/wn/10d@2x.png");
     expect(weatherIcon).toHaveAttribute("title", "Rain");
 
+    expect(screen.getByText("LIGHT RAIN")).toBeInTheDocument();
+
     const humidityIcon = screen.getByRole("img", { name: "Humidity" });
     expect(humidityIcon).toHaveAttribute("src", "/humidity.svg");
     expect(humidityIcon).toHaveAttribute("title", "Humidity");

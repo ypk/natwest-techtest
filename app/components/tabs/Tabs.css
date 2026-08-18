@@ -1,0 +1,80 @@
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.tabs-bar {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+}
+
+.tabs-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs-bar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  min-width: 6.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  scroll-snap-align: start;
+}
+
+.tab-btn:hover {
+  border-color: var(--brand-purple, #5a287d);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tab-btn.active {
+  border-color: var(--brand-purple, #5a287d);
+  background: var(--brand-purple-light, #f2eaf9);
+}
+
+.tab-btn .tab-day {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-text, #646068);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tab-btn .tab-date {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-color, #34303a);
+}
+
+.tab-btn .tab-temp {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brand-purple, #5a287d);
+  margin-top: 0.125rem;
+}

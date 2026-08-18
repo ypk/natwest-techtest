@@ -11,6 +11,10 @@
   margin-inline: auto;
 }
 
+.layout > * {
+  min-width: 0;
+}
+
 .intro {
   max-width: 40rem;
 }
