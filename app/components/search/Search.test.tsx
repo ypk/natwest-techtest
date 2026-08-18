@@ -24,7 +24,7 @@ const londonWeather: CurrentWeather = {
   windSpeed: 4.2,
   condition: {
     description: "light rain",
-    icon: "10d",
+    iconUrl: "https://openweathermap.org/img/wn/10d@2x.png",
     main: "Rain",
   },
 };

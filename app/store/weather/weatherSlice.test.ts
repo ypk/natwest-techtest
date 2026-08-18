@@ -10,7 +10,7 @@ const sampleWeather: CurrentWeather = {
   feelsLike: 19,
   humidity: 50,
   windSpeed: 3.5,
-  condition: { description: "Sunny", icon: "01d", main: "Clear" },
+  condition: { description: "Sunny", iconUrl: "https://openweathermap.org/img/wn/01d@2x.png", main: "Clear" },
 };
 
 const sampleEntry: CachedWeatherEntry = {

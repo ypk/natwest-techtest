@@ -50,7 +50,7 @@ describe("mapForecastFromOpenWeather", () => {
     expect(result[0].humidity).toBe(65);
     expect(result[0].windSpeed).toBe(4.1);
     expect(result[0].condition.description).toBe("light rain");
-    expect(result[0].condition.icon).toBe("10d");
+    expect(result[0].condition.iconUrl).toBe("https://openweathermap.org/img/wn/10d@2x.png");
     expect(result[0].dateTimeText).toContain(",");
   });
 });

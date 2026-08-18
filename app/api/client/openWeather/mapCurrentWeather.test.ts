@@ -22,7 +22,7 @@ describe("mapCurrentWeather", () => {
       feelsLike: 17,
       humidity: 63,
       windSpeed: 4.2,
-      condition: { description: "light rain", icon: "10d", main: "Rain" },
+      condition: { description: "light rain", iconUrl: "https://openweathermap.org/img/wn/10d@2x.png", main: "Rain" },
     });
   });
 
@@ -45,7 +45,7 @@ describe("mapCurrentWeather", () => {
 
     expect(result.condition).toEqual({
       description: "Weather conditions unavailable",
-      icon: "",
+      iconUrl: "",
       main: "Unknown",
     });
   });

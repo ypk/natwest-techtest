@@ -1,6 +1,6 @@
 export type WeatherCondition = {
   description: string;
-  icon: string;
+  iconUrl: string;
   main: string;
 };
 

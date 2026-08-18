@@ -1,5 +1,6 @@
 import type { ForecastItem } from "~/types/weather";
 import type { OpenWeatherForecastResponse } from "./openWeather.contracts";
+import { getIconUrl } from "./openWeather.settings";
 
 export function formatForecastDateTime(dt: number): string {
   const date = new Date(dt * 1000);
@@ -20,11 +21,7 @@ export function mapForecastFromOpenWeather(
   }
 
   return response.list.map((item) => {
-    const condition = item.weather?.[0] ?? {
-      description: "N/A",
-      icon: "01d",
-      main: "Clear",
-    };
+    const condition = item.weather?.[0];
 
     return {
       dt: item.dt,
@@ -34,11 +31,17 @@ export function mapForecastFromOpenWeather(
       tempMax: Math.round(item.main.temp_max),
       humidity: Math.round(item.main.humidity),
       windSpeed: Math.round(item.wind.speed * 10) / 10,
-      condition: {
-        description: condition.description,
-        icon: condition.icon,
-        main: condition.main,
-      },
+      condition: condition
+        ? {
+            description: condition.description,
+            iconUrl: getIconUrl(condition.icon),
+            main: condition.main,
+          }
+        : {
+            description: "N/A",
+            iconUrl: getIconUrl("01d"),
+            main: "Clear",
+          },
     };
   });
 }

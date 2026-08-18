@@ -1,5 +1,6 @@
 import type { CurrentWeather } from "~/types/weather";
 import type { OpenWeatherCurrentResponse } from "./openWeather.contracts";
+import { getIconUrl } from "./openWeather.settings";
 
 export function mapCurrentWeather(data: OpenWeatherCurrentResponse): CurrentWeather {
   const {
@@ -17,10 +18,16 @@ export function mapCurrentWeather(data: OpenWeatherCurrentResponse): CurrentWeat
     feelsLike: Math.round(feels_like),
     humidity,
     windSpeed: speed,
-    condition: weather[0] ?? {
-      description: "Weather conditions unavailable",
-      icon: "",
-      main: "Unknown",
-    },
+    condition: weather[0]
+      ? {
+          description: weather[0].description,
+          iconUrl: getIconUrl(weather[0].icon),
+          main: weather[0].main,
+        }
+      : {
+          description: "Weather conditions unavailable",
+          iconUrl: "",
+          main: "Unknown",
+        },
   };
 }
