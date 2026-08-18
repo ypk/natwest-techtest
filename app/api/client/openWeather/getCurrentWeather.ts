@@ -1,6 +1,7 @@
-import { openWeatherSettings } from "./openWeather.settings";
-import type { OpenWeatherErrorResponse } from "./openWeather.contracts";
+import type { OpenWeatherCurrentResponse, OpenWeatherErrorResponse } from "./openWeather.contracts";
 import { mapCurrentWeather } from "./mapCurrentWeather";
+import { openWeatherSettings } from "./openWeather.settings";
+import { openWeatherFetch } from "./openWeatherFetch";
 
 export async function getCurrentWeatherFromOpenWeather(
   city: string,
@@ -16,51 +17,27 @@ export async function getCurrentWeatherFromOpenWeather(
     );
   }
 
-  const url = new URL(
-    openWeatherSettings.currentWeatherPath,
-    openWeatherSettings.baseUrl
-  );
+  const result = await openWeatherFetch({
+    path: openWeatherSettings.currentWeatherPath,
+    params: { q: city, units: "metric" },
+    tag: "OPENWEATHER",
+    apiKey,
+    signal,
+    rethrowOnAbort: true,
+  });
 
-  url.search = new URLSearchParams({
-    appid: apiKey,
-    q: city,
-    units: "metric",
-  }).toString();
-
-  let response: Response;
-  try {
-    response = await fetch(url, { signal });
-  } catch (fetchErr) {
-    const cause = fetchErr instanceof Error ? (fetchErr as unknown as Record<string, unknown>).cause : undefined;
-    console.error("[OPENWEATHER FETCH FAILED]", {
-      url: url.toString().replace(apiKey, "[REDACTED]"),
-      error: fetchErr instanceof Error ? fetchErr.message : fetchErr,
-      cause: cause instanceof Error ? cause.message : cause,
-    });
-    throw fetchErr;
-  }
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`[OPENWEATHER HTTP ${response.status}]`, {
-      url: url.toString().replace(apiKey, "[REDACTED]"),
-      status: response.status,
-      statusText: response.statusText,
-      body: errorText,
-    });
-
+  if (!result.ok) {
+    // openWeatherFetch already logged the HTTP error; attempt to surface
+    // the API's own message (e.g. "city not found") for the user.
     let errorMessage = "Unable to fetch weather.";
     try {
-      const errorJson = JSON.parse(errorText) as OpenWeatherErrorResponse;
-      errorMessage = errorJson.message || errorMessage;
+      const parsed = JSON.parse(result.body ?? "") as OpenWeatherErrorResponse;
+      errorMessage = parsed.message || errorMessage;
     } catch {
-      // Keep default error message if JSON parsing fails
+      // Keep default error message if body is unavailable or unparseable
     }
-
     throw new Error(errorMessage);
   }
 
-  const data = await response.json();
-
-  return mapCurrentWeather(data);
+  return mapCurrentWeather(result.json as OpenWeatherCurrentResponse);
 }

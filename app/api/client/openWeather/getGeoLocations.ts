@@ -1,6 +1,7 @@
 import type { LocationSuggestion } from "~/types/weather";
 import type { OpenWeatherGeoItem } from "./openWeather.contracts";
 import { openWeatherSettings } from "./openWeather.settings";
+import { openWeatherFetch } from "./openWeatherFetch";
 
 export async function getGeoLocationsFromOpenWeather(
   city: string,
@@ -11,67 +12,34 @@ export async function getGeoLocationsFromOpenWeather(
     return [];
   }
 
-  const url = new URL(
-    openWeatherSettings.geoPath,
-    openWeatherSettings.baseUrl
-  );
+  const result = await openWeatherFetch({
+    path: openWeatherSettings.geoPath,
+    params: { q: city.trim(), limit: "5" },
+    tag: "OPENWEATHER GEO",
+    apiKey,
+    signal,
+  });
 
-  url.search = new URLSearchParams({
-    appid: apiKey,
-    q: city.trim(),
-    limit: "5",
-  }).toString();
+  if (!result.ok) return [];
 
-  let response: Response;
-  try {
-    response = await fetch(url, { signal });
-  } catch (fetchErr) {
-    const cause = fetchErr instanceof Error ? (fetchErr as unknown as Record<string, unknown>).cause : undefined;
-    console.error("[OPENWEATHER GEO FETCH FAILED]", {
-      url: url.toString().replace(apiKey, "[REDACTED]"),
-      error: fetchErr instanceof Error ? fetchErr.message : fetchErr,
-      cause: cause instanceof Error ? cause.message : cause,
-    });
-    return [];
-  }
+  const items = result.json as OpenWeatherGeoItem[];
+  if (!Array.isArray(items)) return [];
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`[OPENWEATHER GEO HTTP ${response.status}]`, {
-      url: url.toString().replace(apiKey, "[REDACTED]"),
-      status: response.status,
-      statusText: response.statusText,
-      body: errorText,
-    });
-    return [];
-  }
+  const seen = new Set<string>();
+  const suggestions: LocationSuggestion[] = [];
 
-  try {
-    const items = (await response.json()) as OpenWeatherGeoItem[];
-    if (!Array.isArray(items)) return [];
-
-    const seen = new Set<string>();
-    const suggestions: LocationSuggestion[] = [];
-
-    for (const item of items) {
-      const key = `${item.name.toLowerCase()}-${item.country.toLowerCase()}-${(item.state || "").toLowerCase()}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        suggestions.push({
-          name: item.name,
-          country: item.country,
-          state: item.state,
-          query: `${item.name}, ${item.country}`,
-        });
-      }
+  for (const item of items) {
+    const key = `${item.name.toLowerCase()}-${item.country.toLowerCase()}-${(item.state || "").toLowerCase()}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      suggestions.push({
+        name: item.name,
+        country: item.country,
+        state: item.state,
+        query: `${item.name}, ${item.country}`,
+      });
     }
-
-    return suggestions;
-  } catch (parseErr) {
-    console.error("[OPENWEATHER GEO PARSE ERROR]", {
-      url: url.toString().replace(apiKey, "[REDACTED]"),
-      error: parseErr instanceof Error ? parseErr.message : parseErr,
-    });
-    return [];
   }
+
+  return suggestions;
 }
