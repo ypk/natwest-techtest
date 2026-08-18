@@ -1,0 +1,35 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import type { ForecastItem } from "~/types/weather";
+import { Forecast } from "./Forecast";
+
+const sampleForecast: ForecastItem[] = [
+  {
+    dt: 1700000000,
+    dateTimeText: "Tue, 12:00 PM",
+    temperature: 19,
+    tempMin: 16,
+    tempMax: 20,
+    humidity: 65,
+    windSpeed: 4.1,
+    condition: { description: "light rain", iconUrl: "https://openweathermap.org/img/wn/10d@2x.png", main: "Rain" },
+  },
+];
+
+describe("Forecast component", () => {
+  it("renders null when forecast is missing or empty", () => {
+    const { container } = render(<Forecast forecast={[]} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("renders forecast cards with datetime, temperature, and details", () => {
+    render(<Forecast forecast={sampleForecast} />);
+
+    expect(screen.getByRole("heading", { name: /5-day \/ 3-hour forecast/i })).toBeInTheDocument();
+    expect(screen.getByText("Tue, 12:00 PM")).toBeInTheDocument();
+    expect(screen.getByText("19°C")).toBeInTheDocument();
+    expect(screen.getByText("Rain")).toBeInTheDocument();
+    expect(screen.getByText("65%")).toBeInTheDocument();
+    expect(screen.getByText("4.1 m/s")).toBeInTheDocument();
+  });
+});

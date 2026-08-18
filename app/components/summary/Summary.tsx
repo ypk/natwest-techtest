@@ -1,3 +1,4 @@
+import { Forecast } from "~/components/forecast/Forecast";
 import type { CurrentWeather } from "~/types/weather";
 
 type SummaryProps = {
@@ -14,6 +15,7 @@ export function Summary({ weather, onReset }: SummaryProps) {
     feelsLike,
     windSpeed,
     humidity,
+    forecast,
   } = weather;
 
   return (
@@ -51,6 +53,8 @@ export function Summary({ weather, onReset }: SummaryProps) {
           <dd>{humidity}%</dd>
         </div>
       </dl>
+
+      <Forecast forecast={forecast} />
     </article>
   );
 }

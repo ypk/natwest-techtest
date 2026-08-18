@@ -42,7 +42,7 @@ describe("getCurrentWeather", () => {
     const response = await getCurrentWeather(request);
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual(weather);
+    expect(await response.json()).toEqual({ ...weather, forecast: [] });
     expect(mockedProvider.getCurrentWeather).toHaveBeenCalledWith(
       "London",
       request.signal

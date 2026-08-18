@@ -22,12 +22,17 @@ export async function getCurrentWeather(request: Request) {
       }
     }
 
-    const weather = await weatherProvider.getCurrentWeather(
-      city,
-      request.signal
-    );
+    const [weather, forecast] = await Promise.all([
+      weatherProvider.getCurrentWeather(city, request.signal),
+      weatherProvider.getForecast
+        ? weatherProvider.getForecast(city, request.signal).catch(() => [])
+        : Promise.resolve([]),
+    ]);
 
-    return Response.json(weather);
+    return Response.json({
+      ...weather,
+      forecast,
+    });
   } catch (error) {
     const cause = error instanceof Error ? (error as unknown as Record<string, unknown>).cause : undefined;
     console.error("[API WEATHER ERROR]", {
