@@ -1,25 +1,25 @@
 import {
-  getCurrentWeatherFromOpenWeather,
-  getForecastFromOpenWeather,
-  getGeoLocationsFromOpenWeather,
+  fetchWeather,
+  fetchForecast,
+  fetchLocations,
 } from "../client/openWeather";
 import type { WeatherProvider } from "./weatherProvider.types";
 
 export const weatherProvider: WeatherProvider = {
   getCurrentWeather: (city, signal) =>
-    getCurrentWeatherFromOpenWeather(
+    fetchWeather(
       city,
       process.env.OPENWEATHER_API_KEY ?? "",
       signal
     ),
   getGeoLocations: (city, signal) =>
-    getGeoLocationsFromOpenWeather(
+    fetchLocations(
       city,
       process.env.OPENWEATHER_API_KEY ?? "",
       signal
     ),
   getForecast: (city, signal) =>
-    getForecastFromOpenWeather(
+    fetchForecast(
       city,
       process.env.OPENWEATHER_API_KEY ?? "",
       signal

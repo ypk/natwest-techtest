@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getForecastFromOpenWeather } from "./getForecast";
+import { fetchForecast } from "./forecast.service";
 
 const mockFetch = vi.fn();
 
-describe("getForecastFromOpenWeather", () => {
+describe("fetchForecast", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", mockFetch);
   });
@@ -13,7 +13,7 @@ describe("getForecastFromOpenWeather", () => {
   });
 
   it("returns empty array when apiKey is missing", async () => {
-    expect(await getForecastFromOpenWeather("London", "")).toEqual([]);
+    expect(await fetchForecast("London", "")).toEqual([]);
   });
 
   it("returns mapped forecast data on successful response", async () => {
@@ -36,7 +36,7 @@ describe("getForecastFromOpenWeather", () => {
       json: () => Promise.resolve(rawResponse),
     });
 
-    const result = await getForecastFromOpenWeather("London", "test-key");
+    const result = await fetchForecast("London", "test-key");
 
     expect(result).toHaveLength(1);
     expect(result[0].temperature).toBe(18);
@@ -45,6 +45,6 @@ describe("getForecastFromOpenWeather", () => {
 
   it("handles fetch errors gracefully by returning empty array", async () => {
     mockFetch.mockRejectedValue(new Error("Network error"));
-    expect(await getForecastFromOpenWeather("London", "test-key")).toEqual([]);
+    expect(await fetchForecast("London", "test-key")).toEqual([]);
   });
 });

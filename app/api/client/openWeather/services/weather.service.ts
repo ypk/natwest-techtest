@@ -1,9 +1,9 @@
-import type { OpenWeatherCurrentResponse, OpenWeatherErrorResponse } from "./openWeather.contracts";
-import { mapCurrentWeather } from "./mapCurrentWeather";
-import { openWeatherSettings } from "./openWeather.settings";
-import { openWeatherFetch } from "./openWeatherFetch";
+import type { OpenWeatherCurrentResponse, OpenWeatherErrorResponse } from "../openWeather.contracts";
+import { mapCurrentWeather } from "../mappers/mapCurrentWeather";
+import { openWeatherSettings } from "../openWeather.settings";
+import { openWeatherFetch } from "../openWeatherFetch";
 
-export async function getCurrentWeatherFromOpenWeather(
+export async function fetchWeather(
   city: string,
   apiKey: string,
   signal?: AbortSignal

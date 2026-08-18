@@ -1,10 +1,10 @@
 import type { ForecastItem } from "~/types/weather";
-import { mapForecastFromOpenWeather } from "./mapForecast";
-import type { OpenWeatherForecastResponse } from "./openWeather.contracts";
-import { openWeatherSettings } from "./openWeather.settings";
-import { openWeatherFetch } from "./openWeatherFetch";
+import { mapForecastFromOpenWeather } from "../mappers/mapForecast";
+import type { OpenWeatherForecastResponse } from "../openWeather.contracts";
+import { openWeatherSettings } from "../openWeather.settings";
+import { openWeatherFetch } from "../openWeatherFetch";
 
-export async function getForecastFromOpenWeather(
+export async function fetchForecast(
   city: string,
   apiKey: string,
   signal?: AbortSignal

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { OpenWeatherCurrentResponse } from "./openWeather.contracts";
+import type { OpenWeatherCurrentResponse } from "../openWeather.contracts";
 import { mapCurrentWeather } from "./mapCurrentWeather";
 
 const fullResponse: OpenWeatherCurrentResponse = {

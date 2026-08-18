@@ -2,31 +2,32 @@
 
 A weather dashboard built with React, React Router v7, Redux Toolkit, and TypeScript for the NatWest Front-End Coding Exercise.
 
-## What It Does
+## Features
 
-This application lets users search for current weather conditions by city name or postcode. It fetches data from OpenWeather and displays temperature, conditions, feels-like temperature, wind speed, and humidity.
+This application lets users search for current weather conditions by city name or postcode. It fetches data from OpenWeather and displays temperature, conditions, feels-like temperature, wind speed, humidity, and an extended 5-day forecast.
 
-Key highlights:
-- **Search and URL sync**: Search terms sync directly to the URL (`?city=London`), allowing shareable links and browser history navigation.
-- **Location Disambiguation**: Broad city searches (e.g. `York` or `Paris`) detect multiple matching cities (e.g. `York, GB` vs `York, US`) and present interactive suggestion links to load the exact location.
-- **Two-level response caching**: Repeating city searches return instant results (0ms latency) via in-memory Redux state and browser `sessionStorage` persistence.
-- **Request cancellation**: In-flight requests automatically abort via `AbortController` when a user types a new search or resets the form.
-- **Error handling**: Gracefully handles missing cities, network issues, and missing API keys with helpful error codes (`ERR_CONFIG_MISSING`).
-- **Responsive layout**: Mobile-first design tailored to work across mobile, tablet, and desktop viewports.
+Key features:
+- **Search and URL sync**: Search terms sync to the URL (`?city=London`) for shareable links and browser history navigation.
+- **Extended 5-Day Forecast**: A scrollable horizontal carousel that shows 3-hour interval weather forecasts.
+- **Location Disambiguation**: Broad city searches (like `York` or `Paris`) detect multiple matching cities (such as `York, GB` and `York, US`) and present suggestion links to load the exact location.
+- **Two-level response caching**: Repeating city searches return instant results using in-memory Redux state and browser `sessionStorage` with a 10-minute expiration.
+- **Request cancellation**: Active requests abort using `AbortController` when a user types a new search or resets the form.
+- **Error handling**: Displays helpful messages for missing cities, network issues, and missing API keys (`ERR_CONFIG_MISSING`).
+- **Responsive layout**: Mobile-first design that works across different screen sizes.
 
 ## Architecture
 
-The project is structured to keep UI logic separate from data fetching and state management:
+The project separates UI logic, data fetching, and state management:
 
-- **UI Components** (`app/components/`): Presentational components co-located with their unit tests in dedicated subfolders (`disambiguation/`, `form/`, `intro/`, `message/`, `search/`, `summary/`).
-- **Redux Store** (`app/store/`): Global application state managed by Redux Toolkit (`@reduxjs/toolkit` and `react-redux`).
-  - `store.ts`: Store configuration (`configureStore`).
+- **UI Components** (`app/components/`): Presentational components located with their unit tests in dedicated subfolders (`disambiguation/`, `forecast/`, `form/`, `intro/`, `message/`, `search/`, `summary/`).
+- **Redux Store** (`app/store/`): Global application state managed by Redux Toolkit.
+  - `store.ts`: Store configuration.
   - `hooks.ts`: Typed Redux hooks (`useAppDispatch`, `useAppSelector`).
-  - `weather/`: Modular weather store module with `weatherSlice`, `weatherThunks` (`fetchWeatherThunk`), `weatherTypes`, and unit tests.
-- **Storage Layer** (`app/storage/`): Facade and Provider pattern supporting pluggable browser storage engines (`sessionStorage`, `localStorage`, `cookieStorage`).
-- **State Hook** (`app/hooks/useWeatherSearch.ts`): Custom React hook connecting components to the Redux store while managing URL query parameter synchronization.
-- **API Layer** (`app/api/`): Built using a Facade/Provider pattern with OpenWeather Geocoding API (`/geo/1.0/direct`) for location disambiguation. Components and routes only talk to `app/api/weather`. The facade delegates to `weatherProvider`, which calls the OpenWeather client.
-- **Types** (`app/types/`): Shared TypeScript domain interfaces (`CurrentWeather`, `WeatherCondition`, `LocationSuggestion`).
+  - `weather/`: Weather store slice, thunks, types, and unit tests.
+- **Storage Layer** (`app/storage/`): Provider pattern that supports different browser storage engines (like `sessionStorage`, `localStorage`, or `cookieStorage`).
+- **State Hook** (`app/hooks/useWeatherSearch.ts`): Custom React hook that connects components to the Redux store and manages URL query parameter synchronization.
+- **API Layer** (`app/api/`): Client mappers and services that fetch current weather, forecast, and geocoding data from OpenWeather. Components and routes only talk to `app/api/weather`.
+- **Types** (`app/types/`): Shared TypeScript domain interfaces.
 
 ## Getting Started
 
@@ -37,9 +38,9 @@ The project is structured to keep UI logic separate from data fetching and state
 
 ### Environment Setup
 
-The application uses the OpenWeather API (`/data/2.5/weather` and `/geo/1.0/direct`). You need an API key to fetch live weather data.
+The application uses the OpenWeather API. You need an API key to fetch live weather data.
 
-1. Get a free API key from [OpenWeather](https://openweathermap.org/api).
+1. Get an API key from [OpenWeather](https://openweathermap.org/api).
 2. Create a `.env.local` file in the root directory:
    ```env
    OPENWEATHER_API_KEY=your_api_key_here
@@ -61,11 +62,6 @@ Open `http://localhost:5173` in your browser.
 Run tests:
 ```bash
 npm test
-```
-
-Run tests in watch mode:
-```bash
-npx vitest
 ```
 
 Run TypeScript type check:
@@ -91,9 +87,10 @@ docker run -p 3000:3000 -e OPENWEATHER_API_KEY=your_api_key weather-app
 
 ## Testing
 
-The codebase includes 61 unit and integration tests written with Vitest and React Testing Library across 17 test files:
-- **Location Disambiguation**: OpenWeather geocoding client, thunks, `<Disambiguation />` component, and interactive suggestion links.
-- **Redux Store and Caching**: Reducers, thunks, in-memory cache, and `sessionStorage` facade helpers.
-- **Components**: Form inputs, user events, loading/error states, and display logic.
-- **API and Mappers**: Metric rounding, data mapping, missing key behavior, and error code outputs.
-- **Routes and Handlers**: Document metadata, API resource endpoints, and 404 wildcard fallback routing.
+The codebase includes unit and integration tests written with Vitest and React Testing Library:
+- **Extended Forecast**: Test coverage for client, mapper, and the forecast component.
+- **Location Disambiguation**: Test coverage for the geocoding client, thunks, and disambiguation links.
+- **Redux Store and Caching**: Test coverage for reducers, caching, and storage helper classes.
+- **Components**: Test coverage for form inputs, user interaction, display states, and error layouts.
+- **API and Mappers**: Test coverage for data conversion, rounding, and error reporting.
+- **Routes and Handlers**: Test coverage for resource endpoints, metadata, and 404 routing.

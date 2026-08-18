@@ -1,4 +1,4 @@
-export { getCurrentWeatherFromOpenWeather } from "./getCurrentWeather";
-export { getGeoLocationsFromOpenWeather } from "./getGeoLocations";
-export { getForecastFromOpenWeather } from "./getForecast";
-export { mapForecastFromOpenWeather } from "./mapForecast";
+export { fetchWeather } from "./services/weather.service";
+export { fetchLocations } from "./services/location.service";
+export { fetchForecast } from "./services/forecast.service";
+export { mapForecastFromOpenWeather } from "./mappers/mapForecast";

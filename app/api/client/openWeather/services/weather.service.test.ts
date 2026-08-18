@@ -1,10 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-import { getCurrentWeatherFromOpenWeather } from "./getCurrentWeather";
+import { fetchWeather } from "./weather.service";
 
 const mockFetch = vi.fn();
 
-describe("getCurrentWeatherFromOpenWeather", () => {
+describe("fetchWeather", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", mockFetch);
   });
@@ -15,7 +14,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
 
   it("throws when the API key is missing", async () => {
     await expect(
-      getCurrentWeatherFromOpenWeather("London", "")
+      fetchWeather("London", "")
     ).rejects.toThrow(
       "Something went wrong, please try again later.\nCode: ERR_CONFIG_MISSING"
     );
@@ -35,7 +34,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
       json: () => Promise.resolve(apiResponse),
     });
 
-    const result = await getCurrentWeatherFromOpenWeather("London", "test-key");
+    const result = await fetchWeather("London", "test-key");
 
     expect(result.city).toBe("London");
     expect(result.temperature).toBe(18);
@@ -53,7 +52,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
     });
 
     await expect(
-      getCurrentWeatherFromOpenWeather("Nope", "test-key")
+      fetchWeather("Nope", "test-key")
     ).rejects.toThrow("city not found");
   });
 
@@ -72,7 +71,7 @@ describe("getCurrentWeatherFromOpenWeather", () => {
         }),
     });
 
-    await getCurrentWeatherFromOpenWeather("London", "test-key", controller.signal);
+    await fetchWeather("London", "test-key", controller.signal);
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.any(URL),

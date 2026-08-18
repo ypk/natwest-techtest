@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mapForecastFromOpenWeather } from "./mapForecast";
-import type { OpenWeatherForecastResponse } from "./openWeather.contracts";
+import type { OpenWeatherForecastResponse } from "../openWeather.contracts";
 
 describe("mapForecastFromOpenWeather", () => {
   it("returns empty array when list is missing or empty", () => {

@@ -1,9 +1,9 @@
 import type { LocationSuggestion } from "~/types/weather";
-import type { OpenWeatherGeoItem } from "./openWeather.contracts";
-import { openWeatherSettings } from "./openWeather.settings";
-import { openWeatherFetch } from "./openWeatherFetch";
+import type { OpenWeatherGeoItem } from "../openWeather.contracts";
+import { openWeatherSettings } from "../openWeather.settings";
+import { openWeatherFetch } from "../openWeatherFetch";
 
-export async function getGeoLocationsFromOpenWeather(
+export async function fetchLocations(
   city: string,
   apiKey: string,
   signal?: AbortSignal

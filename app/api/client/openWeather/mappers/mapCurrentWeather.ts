@@ -1,6 +1,6 @@
 import type { CurrentWeather } from "~/types/weather";
-import type { OpenWeatherCurrentResponse } from "./openWeather.contracts";
-import { getIconUrl } from "./openWeather.settings";
+import type { OpenWeatherCurrentResponse } from "../openWeather.contracts";
+import { getIconUrl } from "../openWeather.settings";
 
 export function mapCurrentWeather(data: OpenWeatherCurrentResponse): CurrentWeather {
   const {

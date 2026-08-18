@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getGeoLocationsFromOpenWeather } from "./getGeoLocations";
+import { fetchLocations } from "./location.service";
 
 const mockFetch = vi.fn();
 
-describe("getGeoLocationsFromOpenWeather", () => {
+describe("fetchLocations", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", mockFetch);
   });
@@ -13,8 +13,8 @@ describe("getGeoLocationsFromOpenWeather", () => {
   });
 
   it("returns empty array when apiKey or city is empty", async () => {
-    expect(await getGeoLocationsFromOpenWeather("", "test-key")).toEqual([]);
-    expect(await getGeoLocationsFromOpenWeather("London", "")).toEqual([]);
+    expect(await fetchLocations("", "test-key")).toEqual([]);
+    expect(await fetchLocations("London", "")).toEqual([]);
   });
 
   it("fetches location suggestions for York", async () => {
@@ -28,7 +28,7 @@ describe("getGeoLocationsFromOpenWeather", () => {
       json: () => Promise.resolve(geoItems),
     });
 
-    const suggestions = await getGeoLocationsFromOpenWeather("York", "test-key");
+    const suggestions = await fetchLocations("York", "test-key");
 
     expect(suggestions).toHaveLength(2);
     expect(suggestions[0]).toEqual({
@@ -47,7 +47,7 @@ describe("getGeoLocationsFromOpenWeather", () => {
 
   it("handles fetch failure gracefully", async () => {
     mockFetch.mockRejectedValue(new Error("Network error"));
-    const suggestions = await getGeoLocationsFromOpenWeather("York", "test-key");
+    const suggestions = await fetchLocations("York", "test-key");
     expect(suggestions).toEqual([]);
   });
 });
