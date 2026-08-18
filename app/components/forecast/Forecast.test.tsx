@@ -34,8 +34,11 @@ describe("Forecast component", () => {
     expect(screen.getByRole("heading", { name: "Tuesday, 14 November 2023" })).toBeInTheDocument();
     expect(screen.getByText("Tue, 12:00 PM")).toBeInTheDocument();
     expect(screen.getByText("19°C")).toBeInTheDocument();
-    expect(screen.getByText("Rain")).toBeInTheDocument();
-    expect(screen.getByText("65%")).toBeInTheDocument();
-    expect(screen.getByText("4.1 m/s")).toBeInTheDocument();
+    
+    expect(screen.getByLabelText("Humidity: 65%")).toBeInTheDocument();
+    expect(screen.getByLabelText("Wind speed: 4.1 meters per second")).toBeInTheDocument();
+    
+    const icon = screen.getByRole("img", { name: "light rain" });
+    expect(icon).toHaveAttribute("title", "Rain");
   });
 });
