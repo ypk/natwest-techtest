@@ -3,16 +3,18 @@ import { fetchCurrentWeather } from "~/api/weather";
 import type { FetchWeatherResult } from "~/api/weather/fetchCurrentWeather";
 import type { RootState } from "~/store/store";
 
+export const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
 export const fetchWeatherThunk = createAsyncThunk<
   FetchWeatherResult,
   string,
   { state: RootState; rejectValue: string }
 >("weather/fetchCurrentWeather", async (cityName, { getState, rejectWithValue, signal }) => {
   const normalizedKey = cityName.toLowerCase().trim();
-  const cachedWeather = getState().weather?.cache?.[normalizedKey];
+  const cachedEntry = getState().weather?.cache?.[normalizedKey];
 
-  if (cachedWeather) {
-    return { weather: cachedWeather };
+  if (cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_TTL_MS) {
+    return { weather: cachedEntry.weather };
   }
 
   try {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CurrentWeather } from "~/types/weather";
+import type { CachedWeatherEntry, CurrentWeather } from "~/types/weather";
 import { RequestStatus, resetSearch, setCity, weatherReducer } from "./index";
 import type { WeatherState } from "./index";
 
@@ -11,6 +11,11 @@ const sampleWeather: CurrentWeather = {
   humidity: 50,
   windSpeed: 3.5,
   condition: { description: "Sunny", icon: "01d", main: "Clear" },
+};
+
+const sampleEntry: CachedWeatherEntry = {
+  weather: sampleWeather,
+  timestamp: 1700000000000,
 };
 
 describe("weatherSlice", () => {
@@ -39,7 +44,7 @@ describe("weatherSlice", () => {
       weather: sampleWeather,
       suggestions: null,
       error: null,
-      cache: { london: sampleWeather },
+      cache: { london: sampleEntry },
     };
 
     const resetState = weatherReducer(populatedState, resetSearch());
@@ -47,6 +52,6 @@ describe("weatherSlice", () => {
     expect(resetState.status).toBe(RequestStatus.IDLE);
     expect(resetState.weather).toBeNull();
     expect(resetState.suggestions).toBeNull();
-    expect(resetState.cache).toEqual({ london: sampleWeather });
+    expect(resetState.cache).toEqual({ london: sampleEntry });
   });
 });

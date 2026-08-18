@@ -51,9 +51,14 @@ export const weatherSlice = createSlice({
           state.suggestions = null;
           state.error = null;
 
-          const normalizedKey = action.payload.weather.city.toLowerCase().trim();
-          state.cache[normalizedKey] = action.payload.weather;
-          saveCachedWeather(state.cache);
+          const requestedKey = state.city.toLowerCase().trim();
+          if (requestedKey) {
+            state.cache[requestedKey] = {
+              weather: action.payload.weather,
+              timestamp: Date.now(),
+            };
+            saveCachedWeather(state.cache);
+          }
         }
       })
       .addCase(fetchWeatherThunk.rejected, (state, action) => {

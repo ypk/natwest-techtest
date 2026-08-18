@@ -20,3 +20,8 @@ export type LocationSuggestion = {
   state?: string;
   query: string;
 };
+
+export type CachedWeatherEntry = {
+  weather: CurrentWeather;
+  timestamp: number;
+};

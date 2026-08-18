@@ -1,4 +1,8 @@
-import type { CurrentWeather, LocationSuggestion } from "~/types/weather";
+import type {
+  CachedWeatherEntry,
+  CurrentWeather,
+  LocationSuggestion,
+} from "~/types/weather";
 
 export enum RequestStatus {
   IDLE = "idle",
@@ -14,5 +18,5 @@ export interface WeatherState {
   weather: CurrentWeather | null;
   suggestions: LocationSuggestion[] | null;
   error: string | null;
-  cache: Record<string, CurrentWeather>;
+  cache: Record<string, CachedWeatherEntry>;
 }

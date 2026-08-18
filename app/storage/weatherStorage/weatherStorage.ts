@@ -1,21 +1,21 @@
-import type { CurrentWeather } from "~/types/weather";
+import type { CachedWeatherEntry } from "~/types/weather";
 import { storageProvider } from "../provider/storageProvider";
 
 const WEATHER_CACHE_KEY = "natwest_weather_cache";
 
-export function loadCachedWeather(): Record<string, CurrentWeather> {
+export function loadCachedWeather(): Record<string, CachedWeatherEntry> {
   const raw = storageProvider.getItem(WEATHER_CACHE_KEY);
   if (!raw) return {};
 
   try {
-    return JSON.parse(raw) as Record<string, CurrentWeather>;
+    return JSON.parse(raw) as Record<string, CachedWeatherEntry>;
   } catch (err) {
     console.warn("[WEATHER_STORAGE PARSE ERROR]", err);
     return {};
   }
 }
 
-export function saveCachedWeather(cache: Record<string, CurrentWeather>): void {
+export function saveCachedWeather(cache: Record<string, CachedWeatherEntry>): void {
   try {
     storageProvider.setItem(WEATHER_CACHE_KEY, JSON.stringify(cache));
   } catch (err) {

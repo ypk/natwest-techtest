@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type { CurrentWeather } from "~/types/weather";
+import type { CachedWeatherEntry, CurrentWeather } from "~/types/weather";
 import { clearCachedWeather, loadCachedWeather, saveCachedWeather } from "./weatherStorage";
 
 const sampleWeather: CurrentWeather = {
@@ -12,6 +12,11 @@ const sampleWeather: CurrentWeather = {
   condition: { description: "rain", icon: "10d", main: "Rain" },
 };
 
+const sampleEntry: CachedWeatherEntry = {
+  weather: sampleWeather,
+  timestamp: 1700000000000,
+};
+
 describe("weatherStorage facade", () => {
   beforeEach(() => {
     clearCachedWeather();
@@ -22,14 +27,14 @@ describe("weatherStorage facade", () => {
   });
 
   it("saves and loads cached weather data", () => {
-    const cache = { london: sampleWeather };
+    const cache = { london: sampleEntry };
     saveCachedWeather(cache);
 
     expect(loadCachedWeather()).toEqual(cache);
   });
 
   it("clears cached weather data", () => {
-    saveCachedWeather({ london: sampleWeather });
+    saveCachedWeather({ london: sampleEntry });
     clearCachedWeather();
 
     expect(loadCachedWeather()).toEqual({});
