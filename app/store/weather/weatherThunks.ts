@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCurrentWeather } from "~/api/weather";
+import { fetchCurrentWeather } from "~/api/weather/fetchCurrentWeather";
 import type { FetchWeatherResult } from "~/api/weather/fetchCurrentWeather";
 import type { RootState } from "~/store/store";
 

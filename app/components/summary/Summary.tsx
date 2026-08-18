@@ -1,4 +1,5 @@
 import { Forecast } from "~/components/forecast/Forecast";
+import { groupForecastByDay } from "~/utils/date";
 import type { CurrentWeather } from "~/types/weather";
 
 type SummaryProps = {
@@ -17,6 +18,8 @@ export function Summary({ weather, onReset }: SummaryProps) {
     humidity,
     forecast,
   } = weather;
+
+  const groupedForecast = groupForecastByDay(forecast || []);
 
   return (
     <article className="summary" aria-label={`Current weather for ${city}`}>
@@ -54,7 +57,7 @@ export function Summary({ weather, onReset }: SummaryProps) {
         </div>
       </dl>
 
-      <Forecast forecast={forecast} />
+      <Forecast forecast={groupedForecast} />
     </article>
   );
 }

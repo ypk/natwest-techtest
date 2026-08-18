@@ -14,6 +14,27 @@
   color: var(--text-heading);
 }
 
+.forecast .day-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.forecast .day-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.forecast .day-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 0.25rem;
+}
+
 .forecast .track {
   display: flex;
   gap: 0.875rem;

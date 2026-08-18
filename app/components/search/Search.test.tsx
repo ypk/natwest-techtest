@@ -4,12 +4,12 @@ import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { fetchCurrentWeather } from "~/api/weather";
+import { fetchCurrentWeather } from "~/api/weather/fetchCurrentWeather";
 import { createStore } from "~/store/store";
 import { Search } from "./Search";
 import type { CurrentWeather } from "~/types/weather";
 
-vi.mock("~/api/weather", () => ({
+vi.mock("~/api/weather/fetchCurrentWeather", () => ({
   fetchCurrentWeather: vi.fn(),
 }));
 
