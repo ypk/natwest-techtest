@@ -1,0 +1,24 @@
+.toggle-group {
+  display: inline-flex;
+  background: var(--brand-purple-light, #f2eaf9);
+  padding: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+}
+
+.toggle-group .toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-text, #646068);
+  border-radius: 999px;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.toggle-group .toggle-btn.active {
+  background: var(--brand-purple, #5a287d);
+  color: var(--surface, #ffffff);
+}

@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
 import type { DailyForecastGroup } from "~/utils/date";
+import { useToggle } from "~/hooks/useToggle";
+import { LAYOUTS, LAYOUT_STORAGE_KEY, type LayoutMode } from "~/constants/layout";
 
 export type TabDetail = {
   dayLabel: string;
@@ -12,9 +14,12 @@ export type TabDetail = {
 
 export function useTabs(
   forecast: DailyForecastGroup[] = [],
-  defaultLayout: "list" | "tabs" = "list"
+  defaultLayout: LayoutMode = LAYOUTS.LIST
 ) {
-  const [layout, setLayout] = useState<"list" | "tabs">(defaultLayout);
+  const [layout, setLayout] = useToggle(
+    LAYOUT_STORAGE_KEY,
+    defaultLayout
+  ) as [LayoutMode, (val: LayoutMode) => void];
   const [activeTab, setActiveTab] = useState<string>("");
 
   // Memoize active tab validation and defaults

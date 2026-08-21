@@ -1,15 +1,22 @@
+import { Toggle } from "~/components/toggle/Toggle";
 import { Panel } from "~/components/panel/Panel";
 import { Tabs } from "~/components/tabs/Tabs";
 import { useTabs } from "~/hooks/useTabs";
 import type { DailyForecastGroup } from "~/utils/date";
+import { LAYOUTS, type LayoutMode } from "~/constants/layout";
 import "./Forecast.css";
 
 type ForecastProps = {
   forecast?: DailyForecastGroup[];
-  defaultLayout?: "list" | "tabs";
+  defaultLayout?: LayoutMode;
 };
 
-export function Forecast({ forecast, defaultLayout = "list" }: ForecastProps) {
+const layoutOptions = [
+  { value: LAYOUTS.LIST, label: "List" },
+  { value: LAYOUTS.TABS, label: "Tabs" },
+];
+
+export function Forecast({ forecast, defaultLayout = LAYOUTS.LIST }: ForecastProps) {
   const {
     layout,
     setLayout,
@@ -27,26 +34,12 @@ export function Forecast({ forecast, defaultLayout = "list" }: ForecastProps) {
     <section className="forecast" aria-label="Extended 5-day forecast">
       <div className="forecast-header">
         <h3 className="title">5-Day / 3-Hour Forecast</h3>
-        <div className="layout-toggle" role="tablist" aria-label="Layout view selection">
-          <button
-            className={`toggle-btn ${layout === "list" ? "active" : ""}`}
-            type="button"
-            role="tab"
-            aria-selected={layout === "list"}
-            onClick={() => setLayout("list")}
-          >
-            List
-          </button>
-          <button
-            className={`toggle-btn ${layout === "tabs" ? "active" : ""}`}
-            type="button"
-            role="tab"
-            aria-selected={layout === "tabs"}
-            onClick={() => setLayout("tabs")}
-          >
-            Tabs
-          </button>
-        </div>
+        <Toggle
+          options={layoutOptions}
+          value={layout}
+          onChange={(val) => setLayout(val as LayoutMode)}
+          ariaLabel="Layout view selection"
+        />
       </div>
 
       {layout === "tabs" ? (
