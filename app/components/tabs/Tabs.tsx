@@ -23,7 +23,7 @@ export function Tabs({ tabs, activeTab, onTabChange, children }: TabsProps) {
           >
             <span className="tab-day">{tab.weekday}</span>
             <span className="tab-date">{tab.dayMonth}</span>
-            <span className="tab-temp">{tab.minTemp}° / {tab.maxTemp}°</span>
+            <span className="tab-temp">{tab.minTemp}&deg; / {tab.maxTemp}&deg;</span>
           </button>
         ))}
       </div>

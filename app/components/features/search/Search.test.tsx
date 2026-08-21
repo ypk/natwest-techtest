@@ -74,7 +74,7 @@ describe("Search", () => {
     await user.type(screen.getByLabelText(/city name/i), "London");
     await user.click(screen.getByRole("button", { name: /search/i }));
 
-    expect(window.location.search).toBe("?city=London");
+    expect(window.location.search).toBe("?city=London&units=metric");
     expect(mockedFetchCurrentWeather).toHaveBeenCalledWith("London", expect.any(AbortSignal));
     expect(await screen.findByText("London, GB")).toBeInTheDocument();
     expect(screen.getByText("18°C")).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe("Search", () => {
     await user.click(screen.getByRole("button", { name: /clear weather result/i }));
 
     expect(screen.queryByText("London, GB")).not.toBeInTheDocument();
-    expect(window.location.search).toBe("");
+    expect(window.location.search).toBe("?units=metric");
     expect(screen.getByLabelText(/city name/i)).toHaveValue("");
     expect(screen.getByText(/enter a city to get started/i)).toBeInTheDocument();
   });

@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { Search } from "~/components/search/Search";
+import { Search } from "~/components/features/search/Search";
 
 /**
  * returns document metadata for the index route.

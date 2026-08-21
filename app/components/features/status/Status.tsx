@@ -1,20 +1,20 @@
-import { Disambiguation } from "~/components/disambiguation/Disambiguation";
+import { Disambiguation } from "~/components/features/disambiguation/Disambiguation";
 import { RequestStatus } from "~/hooks/useWeatherSearch";
 import type { LocationSuggestion } from "~/types/weather";
 
-type StatusMessageProps = {
+type StatusProps = {
   error: string | null;
   status: RequestStatus;
   suggestions?: LocationSuggestion[] | null;
   city?: string;
 };
 
-export function StatusMessage({
+export function Status({
   error,
   status,
   suggestions,
   city,
-}: StatusMessageProps) {
+}: StatusProps) {
   if (status === RequestStatus.IDLE) {
     return <p className="message">Enter a city to get started.</p>;
   }

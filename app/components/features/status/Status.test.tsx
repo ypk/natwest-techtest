@@ -2,18 +2,18 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 
-import { StatusMessage } from "./StatusMessage";
+import { Status } from "./Status";
 import { RequestStatus } from "~/hooks/useWeatherSearch";
 
-describe("StatusMessage", () => {
+describe("Status", () => {
   it("renders the initial guidance message", () => {
-    render(<StatusMessage error={null} status={RequestStatus.IDLE} />);
+    render(<Status error={null} status={RequestStatus.IDLE} />);
 
     expect(screen.getByText(/enter a city to get started/i)).toBeInTheDocument();
   });
 
   it("renders an alert when there is an error", () => {
-    render(<StatusMessage error="city not found" status={RequestStatus.ERROR} />);
+    render(<Status error="city not found" status={RequestStatus.ERROR} />);
 
     expect(screen.getByRole("alert")).toHaveTextContent("city not found");
   });
@@ -26,7 +26,7 @@ describe("StatusMessage", () => {
 
     render(
       <BrowserRouter>
-        <StatusMessage
+        <Status
           error={null}
           status={RequestStatus.DISAMBIGUATION}
           suggestions={suggestions}
@@ -42,7 +42,7 @@ describe("StatusMessage", () => {
 
   it("renders nothing when status has no message", () => {
     const { container } = render(
-      <StatusMessage error={null} status={RequestStatus.LOADING} />
+      <Status error={null} status={RequestStatus.LOADING} />
     );
 
     expect(container).toBeEmptyDOMElement();

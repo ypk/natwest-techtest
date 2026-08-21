@@ -10,6 +10,8 @@ import {
   setError as setErrorAction,
 } from "~/store/weather";
 
+import { UNITS_STORAGE_KEY } from "~/constants/layout";
+
 export { RequestStatus };
 
 export function useWeatherSearch() {
@@ -27,6 +29,30 @@ export function useWeatherSearch() {
 
   const urlCity = searchParams.get("city")?.trim() || "";
 
+  // Retrieve initial units from URL or fallback to localStorage
+  const urlUnits = (() => {
+    const param = searchParams.get("units")?.trim();
+    if (param === "metric" || param === "imperial") {
+      return param;
+    }
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(UNITS_STORAGE_KEY);
+      if (stored === "metric" || stored === "imperial") {
+        return stored;
+      }
+    }
+    return "metric";
+  })();
+
+  // Synchronize URL units query parameter if missing
+  useEffect(() => {
+    if (!searchParams.has("units")) {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.set("units", urlUnits);
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams, urlUnits]);
+
   useEffect(() => {
     if (urlCity) {
       dispatch(setCityAction(urlCity));
@@ -43,12 +69,21 @@ export function useWeatherSearch() {
       return;
     }
 
-    setSearchParams({ city: trimmed });
+    setSearchParams({ city: trimmed, units: urlUnits });
   };
 
   const handleReset = () => {
     dispatch(resetSearch());
-    setSearchParams({});
+    setSearchParams({ units: urlUnits });
+  };
+
+  const handleUnitChange = (newUnits: string) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(UNITS_STORAGE_KEY, newUnits);
+    }
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("units", newUnits);
+    setSearchParams(nextParams);
   };
 
   const isLoading = status === RequestStatus.LOADING;
@@ -63,5 +98,7 @@ export function useWeatherSearch() {
     isLoading,
     handleSubmit,
     handleReset,
+    units: urlUnits,
+    handleUnitChange,
   };
 }

@@ -2,13 +2,24 @@ import { Form } from "~/components/form/Form";
 import { Intro } from "~/components/intro/Intro";
 import "~/components/layout/Layout.css";
 import "./Search.css";
-import { StatusMessage } from "~/components/message/StatusMessage";
-import { Summary } from "~/components/summary/Summary";
+import { Status } from "~/components/features/status/Status";
+import { Summary } from "~/components/features/summary/Summary";
 import { useWeatherSearch, RequestStatus } from "~/hooks/useWeatherSearch";
 
 export function Search() {
-  const { city, weather, suggestions, status, error, isLoading, setCity, handleSubmit, handleReset } =
-    useWeatherSearch();
+  const {
+    city,
+    weather,
+    suggestions,
+    status,
+    error,
+    isLoading,
+    setCity,
+    handleSubmit,
+    handleReset,
+    units,
+    handleUnitChange,
+  } = useWeatherSearch();
 
   return (
     <main className="page">
@@ -23,10 +34,10 @@ export function Search() {
             onSubmit={handleSubmit}
           />
 
-          <StatusMessage error={error} status={status} suggestions={suggestions} city={city} />
+          <Status error={error} status={status} suggestions={suggestions} city={city} />
 
           {status === RequestStatus.SUCCESS && weather && (
-            <Summary weather={weather} onReset={handleReset} />
+            <Summary weather={weather} onReset={handleReset} units={units} onUnitChange={handleUnitChange} />
           )}
         </section>
       </section>

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import "~/components/layout/Layout.css";
-import "~/components/search/Search.css";
+import "~/components/features/search/Search.css";
 
 export async function loader() {
   return new Response("Not Found", { status: 404 });

@@ -9,6 +9,7 @@ import "./Forecast.css";
 type ForecastProps = {
   forecast?: DailyForecastGroup[];
   defaultLayout?: LayoutMode;
+  units?: string;
 };
 
 const layoutOptions = [
@@ -16,7 +17,7 @@ const layoutOptions = [
   { value: LAYOUTS.TABS, label: "Tabs" },
 ];
 
-export function Forecast({ forecast, defaultLayout = LAYOUTS.LIST }: ForecastProps) {
+export function Forecast({ forecast, defaultLayout = LAYOUTS.LIST, units = "metric" }: ForecastProps) {
   const {
     layout,
     setLayout,
@@ -47,7 +48,7 @@ export function Forecast({ forecast, defaultLayout = LAYOUTS.LIST }: ForecastPro
           {activeGroup && (
             <div className="track" role="region" aria-label={`Forecast items for ${activeGroup.dayLabel}`}>
               {activeGroup.items.map((item) => (
-                <Panel key={item.dt} item={item} />
+                <Panel key={item.dt} item={item} units={units} />
               ))}
             </div>
           )}
@@ -59,7 +60,7 @@ export function Forecast({ forecast, defaultLayout = LAYOUTS.LIST }: ForecastPro
               <h4 className="day-title">{group.dayLabel}</h4>
               <div className="track" role="region" aria-label={`Forecast for ${group.dayLabel}`}>
                 {group.items.map((item) => (
-                  <Panel key={item.dt} item={item} />
+                  <Panel key={item.dt} item={item} units={units} />
                 ))}
               </div>
             </div>

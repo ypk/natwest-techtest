@@ -51,7 +51,7 @@ export const weatherSlice = createSlice({
           state.suggestions = null;
           state.error = null;
 
-          const requestedKey = state.city.toLowerCase().trim();
+          const requestedKey = action.meta.arg.toLowerCase().trim();
           if (requestedKey) {
             state.cache[requestedKey] = {
               weather: action.payload.weather,

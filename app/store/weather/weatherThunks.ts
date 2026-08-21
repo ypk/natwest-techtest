@@ -9,8 +9,8 @@ export const fetchWeatherThunk = createAsyncThunk<
   FetchWeatherResult,
   string,
   { state: RootState; rejectValue: string }
->("weather/fetchCurrentWeather", async (cityName, { getState, rejectWithValue, signal }) => {
-  const normalizedKey = cityName.toLowerCase().trim();
+>("weather/fetchCurrentWeather", async (city, { getState, rejectWithValue, signal }) => {
+  const normalizedKey = city.toLowerCase().trim();
   const cachedEntry = getState().weather?.cache?.[normalizedKey];
 
   if (cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_TTL_MS) {
@@ -18,7 +18,7 @@ export const fetchWeatherThunk = createAsyncThunk<
   }
 
   try {
-    return await fetchCurrentWeather(cityName, signal);
+    return await fetchCurrentWeather(city, signal);
   } catch (err) {
     if (err instanceof DOMException && err.name === "AbortError") {
       throw err;
